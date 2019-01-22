@@ -1,0 +1,2396 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<!--
+
+Copyright (c) 2018 D.J.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-->
+        <title>Njemački - vježbe</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style type="text/css">
+            * {
+                box-sizing: border-box;
+            }
+
+            body, html {
+                margin: 0;
+                margin: 0;
+                font-family: sans-serif;
+                font-size: 1em;
+                background: #fff;
+            }
+
+            #navbar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                font-weight: bold;
+                padding-left: 10px;
+                line-height: 40px;
+                background: #CCEEFF;
+                border-bottom: 5px solid #888;
+            }
+
+            #navbar_title {
+                font-size: 120%;
+            }
+
+            #test {
+                margin: 65px 10px 10px 10px;
+            }
+
+            .question {
+                padding: 4px;
+            }
+
+            .question-subtitle {
+                font-weight: bold;
+            }
+
+            .question-spacer {
+                padding: 20px;
+            }
+
+            .div_answer {
+                display: inline;
+                line-height: 30px;
+            }
+
+            .answer {
+                border-style: solid;
+                border-color: #ddd;
+                border-width: 0 0 2px 0;
+                background: #fff;
+                color: #00f;
+                font-size: 100%;
+            }
+
+            .answer:hover {
+                background: #fdfdfd;
+            }
+
+            .answer:focus {
+                background: #f8f8f8;
+                border-color: #888;
+            }
+
+            .span-correct {
+                color: #080;
+                border-style: solid;
+                border-color: #ddd;
+                border-width: 0 0 2px 0;
+                text-decoration: none !important;
+            }
+
+            .span-correct-teacher {
+                color: #f00;
+                border-style: solid;
+                border-color: #ddd;
+                border-width: 0 0 2px 0;
+                text-decoration: none !important;
+            }
+
+            .span-fail {
+                color: #00f;
+                text-decoration: line-through;
+                text-decoration-color: #f00;
+                border-style: solid;
+                border-color: #ddd;
+                border-width: 0 0 2px 0;
+            }
+
+            .text-red {
+                color: #f00;
+            }
+
+            .button-test {
+                background: #ff8 !important;
+            }
+
+            .button-reset {
+                background: #fdd !important;
+            }
+
+            .button-check {
+                background: #ff8 !important;
+            }
+
+            .no-display {
+                display: none;
+            }
+
+            button {
+                color: #000;
+                background: #fff;
+                border: 1px solid #369;
+                height: 30px;
+                margin: 0 5px 10px 0;
+                font-size: 90%;
+                cursor: pointer;
+            }
+
+            button:disabled {
+                color: #b0b0b0;
+                cursor: default;
+            }
+
+            button:hover {
+                background: #eef;
+            }
+
+            button:disabled:hover {
+                background: #fff;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="navbar">
+			<div id="navbar_title"></div>
+			<div id="navbar_controls" class="no-display">
+                <button id="button_check" class="button-check">Check result</button>
+                <button id="button_reset" class="button-reset">Reset</button>
+                <button id="button_menu">Main menu</button>
+            </div>
+		</div>
+        <div id="test">
+        </div>
+        <script type="text/javascript">
+
+function $$(elem) {
+    return document.getElementById(elem);
+}
+
+var Data = {
+    title: "Main menu",
+    tests: [
+        {
+            title: "Glagoli - prezent",
+            random: false,
+            questions: [
+                { subtitle: "Sein (biti)" },
+                { q: "ich *", a: "bin" },
+                { q: "du *", a: "bist"},
+                { q: "er/sie/es *", a: "ist" },
+                { q: "wir *", a: "sind" },
+                { q: "ihr *", a: "seid" },
+                { q: "sie/Sie *", a: "sind" },
+
+                { subtitle: "Habe (imati)" },
+                { q: "ich *", a: "habe" },
+                { q: "du *", a: "hast"},
+                { q: "er/sie/es *", a: "hat" },
+                { q: "wir *", a: "haben" },
+                { q: "ihr *", a: "habt" },
+                { q: "sie/Sie *", a: "haben" },
+
+                { subtitle: "Komme (doći)" },
+                { q: "ich *", a: "komme" },
+                { q: "du *", a: "kommst"},
+                { q: "er/sie/es *", a: "kommt" },
+                { q: "wir *", a: "kommen" },
+                { q: "ihr *", a: "kommt" },
+                { q: "sie/Sie *", a: "kommen" },
+
+                { subtitle: "wohne (stanovati)" },
+                { q: "ich *", a: "wohne" },
+                { q: "du *", a: "wohnst"},
+                { q: "er/sie/es *", a: "wohnt" },
+                { q: "wir *", a: "wohnen" },
+                { q: "ihr *", a: "wohnt" },
+                { q: "sie/Sie *", a: "wohnen" },
+
+                { subtitle: "leben (živjeti)" },
+                { q: "ich *", a: "lebe" },
+                { q: "du *", a: "lebst"},
+                { q: "er/sie/es *", a: "lebt" },
+                { q: "wir *", a: "leben" },
+                { q: "ihr *", a: "lebt" },
+                { q: "sie/Sie *", a: "leben" },
+
+                { subtitle: "heiße (zvati)" },
+                { q: "ich *", a: "heiße" },
+                { q: "du *", a: "heißt"},
+                { q: "er/sie/es *", a: "heißt" },
+                { q: "wir *", a: "heißen" },
+                { q: "ihr *", a: "heißt" },
+                { q: "sie/Sie *", a: "heißen" },
+
+                { subtitle: "arbeit (raditi za novac)" },
+                { q: "ich *", a: "arbeite" },
+                { q: "du *", a: "arbeitest"},
+                { q: "er/sie/es *", a: "arbeitet" },
+                { q: "wir *", a: "arbeiten" },
+                { q: "ihr *", a: "arbeitet" },
+                { q: "sie/Sie *", a: "arbeiten" },
+
+                { subtitle: "mach (raditi za džabe)" },
+                { q: "ich *", a: "mache" },
+                { q: "du *", a: "machst"},
+                { q: "er/sie/es *", a: "macht" },
+                { q: "wir *", a: "machen" },
+                { q: "ihr *", a: "macht" },
+                { q: "sie/Sie *", a: "machen" },
+
+                { subtitle: "sprechen (pričati)" },
+                { q: "ich *", a: "spreche" },
+                { q: "du *", a: "sprichst"},
+                { q: "er/sie/es *", a: "spricht" },
+                { q: "wir *", a: "sprechen" },
+                { q: "ihr *", a: "sprecht" },
+                { q: "sie/Sie *", a: "sprechen" },
+
+                { subtitle: "essen (jesti)" },
+                { q: "ich *", a: "esse" },
+                { q: "du *", a: "isst"},
+                { q: "er/sie/es *", a: "isst" },
+                { q: "wir *", a: "essen" },
+                { q: "ihr *", a: "esst" },
+                { q: "sie/Sie *", a: "essen" },
+
+                { subtitle: "bekommen (dobiti)" },
+                { q: "ich *", a: "bekomme" },
+                { q: "du *", a: "bekommst"},
+                { q: "er/sie/es *", a: "bekommt" },
+                { q: "wir *", a: "bekommen" },
+                { q: "ihr *", a: "bekommt" },
+                { q: "sie/Sie *", a: "bekommen" },
+
+                { subtitle: "brauche (trebati)" },
+                { q: "ich *", a: "brauche" },
+                { q: "du *", a: "brauchst"},
+                { q: "er/sie/es *", a: "braucht" },
+                { q: "wir *", a: "brauchen" },
+                { q: "ihr *", a: "braucht" },
+                { q: "sie/Sie *", a: "brauchen" },
+
+                { subtitle: "kaufe (kupiti)" },
+                { q: "ich *", a: "kaufe" },
+                { q: "du *", a: "kaufst"},
+                { q: "er/sie/es *", a: "kauft" },
+                { q: "wir *", a: "kaufen" },
+                { q: "ihr *", a: "kauft" },
+                { q: "sie/Sie *", a: "kaufen" },
+
+                { subtitle: "gefallen (sviđati)" },
+                { q: "ich *", a: "gefalle" },
+                { q: "du *", a: "gefällst"},
+                { q: "er/sie/es *", a: "gefällt" },
+                { q: "wir *", a: "gefallen" },
+                { q: "ihr *", a: "gefallt" },
+                { q: "sie/Sie *", a: "gefallen" },
+
+                { subtitle: "kochen (kuhati)" },
+                { q: "ich *", a: "koche" },
+                { q: "du *", a: "kochst"},
+                { q: "er/sie/es *", a: "kocht" },
+                { q: "wir *", a: "kochen" },
+                { q: "ihr *", a: "kocht" },
+                { q: "sie/Sie *", a: "kochen" },
+
+                { subtitle: "schlafen (spavati)" },
+                { q: "ich *", a: "schlafe" },
+                { q: "du *", a: "schläfst"},
+                { q: "er/sie/es *", a: "schläft" },
+                { q: "wir *", a: "schlafen" },
+                { q: "ihr *", a: "schlaft" },
+                { q: "sie/Sie *", a: "schlafen" },
+
+                { subtitle: "schauen (gledati)" },
+                { q: "ich *", a: "schaue" },
+                { q: "du *", a: "schaust"},
+                { q: "er/sie/es *", a: "schaut" },
+                { q: "wir *", a: "schauen" },
+                { q: "ihr *", a: "schaut" },
+                { q: "sie/Sie *", a: "schauen" },
+
+                { subtitle: "gehen (hodati)" },
+                { q: "ich *", a: "gehe" },
+                { q: "du *", a: "gehst"},
+                { q: "er/sie/es *", a: "geht" },
+                { q: "wir *", a: "gehen" },
+                { q: "ihr *", a: "geht" },
+                { q: "sie/Sie *", a: "gehen" },
+
+                { subtitle: "trinken (piti)" },
+                { q: "ich *", a: "trinke" },
+                { q: "du *", a: "trinkst"},
+                { q: "er/sie/es *", a: "trinkt" },
+                { q: "wir *", a: "trinken" },
+                { q: "ihr *", a: "trinkt" },
+                { q: "sie/Sie *", a: "trinken" },
+
+                { subtitle: "dauern (trajati)" },
+                { q: "ich *", a: "dauere" },
+                { q: "du *", a: "dauerst"},
+                { q: "er/sie/es *", a: "dauert" },
+                { q: "wir *", a: "dauern" },
+                { q: "ihr *", a: "dauert" },
+                { q: "sie/Sie *", a: "dauern" },
+
+                { subtitle: "wandern (planinariti)" },
+                { q: "ich *", a: "wandere" },
+                { q: "du *", a: "wanderst"},
+                { q: "er/sie/es *", a: "wandert" },
+                { q: "wir *", a: "wandern" },
+                { q: "ihr *", a: "wandert" },
+                { q: "sie/Sie *", a: "wandern" },
+
+                { subtitle: "mögen (sviđati se)" },
+                { q: "ich *", a: "mag" },
+                { q: "du *", a: "magst"},
+                { q: "er/sie/es *", a: "magt" },
+                { q: "wir *", a: "mögen" },
+                { q: "ihr *", a: "mögt" },
+                { q: "sie/Sie *", a: "mögen" },
+
+                { subtitle: "können (znati/moći)" },
+                { q: "ich *", a: "kann" },
+                { q: "du *", a: "kannst"},
+                { q: "er/sie/es *", a: "kann" },
+                { q: "wir *", a: "können" },
+                { q: "ihr *", a: "könnt" },
+                { q: "sie/Sie *", a: "können" },
+
+                { subtitle: "wollen (htjeti)" },
+                { q: "ich *", a: "will" },
+                { q: "du *", a: "willst"},
+                { q: "er/sie/es *", a: "will" },
+                { q: "wir *", a: "wollen" },
+                { q: "ihr *", a: "wollt" },
+                { q: "sie/Sie *", a: "wollen" },
+
+                { subtitle: "duschen (tuširati)" },
+                { q: "ich *", a: "dusche" },
+                { q: "du *", a: "duschst"},
+                { q: "er/sie/es *", a: "duscht" },
+                { q: "wir *", a: "duschen" },
+                { q: "ihr *", a: "duscht" },
+                { q: "sie/Sie *", a: "duschen" },
+
+                { subtitle: "singen (pjevati)" },
+                { q: "ich *", a: "singe" },
+                { q: "du *", a: "singst"},
+                { q: "er/sie/es *", a: "singt" },
+                { q: "wir *", a: "singen" },
+                { q: "ihr *", a: "singt" },
+                { q: "sie/Sie *", a: "singen" },
+
+                { subtitle: "waschen (prati)" },
+                { q: "ich *", a: "wasche" },
+                { q: "du *", a: "wäschst"},
+                { q: "er/sie/es *", a: "wäscht" },
+                { q: "wir *", a: "waschen" },
+                { q: "ihr *", a: "wascht" },
+                { q: "sie/Sie *", a: "waschen" },
+
+                { subtitle: "zeichnen (slikati)" },
+                { q: "ich *", a: "zeichne" },
+                { q: "du *", a: "zeichnest"},
+                { q: "er/sie/es *", a: "zeichnet" },
+                { q: "wir *", a: "zeichnen" },
+                { q: "ihr *", a: "zeichnet" },
+                { q: "sie/Sie *", a: "zeichnen" },
+
+                { subtitle: "reiten (jahati)" },
+                { q: "ich *", a: "reite" },
+                { q: "du *", a: "reitest"},
+                { q: "er/sie/es *", a: "reitet" },
+                { q: "wir *", a: "reiten" },
+                { q: "ihr *", a: "reitet" },
+                { q: "sie/Sie *", a: "reiten" },
+
+                { subtitle: "wissen (znati)" },
+                { q: "ich *", a: "weiß" },
+                { q: "du *", a: "weißt"},
+                { q: "er/sie/es *", a: "weiß" },
+                { q: "wir *", a: "wissen" },
+                { q: "ihr *", a: "wisst" },
+                { q: "sie/Sie *", a: "wissen" },
+
+                { subtitle: "klettern (planinariti)" },
+                { q: "ich *", a: "kletter" },
+                { q: "du *", a: "kletterst"},
+                { q: "er/sie/es *", a: "klettert" },
+                { q: "wir *", a: "klettern" },
+                { q: "ihr *", a: "klettert" },
+                { q: "sie/Sie *", a: "klettern" },
+
+                { subtitle: "geben (davati)" },
+                { q: "ich *", a: "gebe" },
+                { q: "du *", a: "gibst"},
+                { q: "er/sie/es *", a: "gibt" },
+                { q: "wir *", a: "geben" },
+                { q: "ihr *", a: "gebt" },
+                { q: "sie/Sie *", a: "geben" },
+
+                { subtitle: "leihen (posuditi)" },
+                { q: "ich *", a: "leihe" },
+                { q: "du *", a: "leihst"},
+                { q: "er/sie/es *", a: "leiht" },
+                { q: "wir *", a: "leihen" },
+                { q: "ihr *", a: "leiht" },
+                { q: "sie/Sie *", a: "leihen" },
+
+                { subtitle: "finden (smatrati)" },
+                { q: "ich *", a: "finde" },
+                { q: "du *", a: "findest"},
+                { q: "er/sie/es *", a: "findet" },
+                { q: "wir *", a: "finden" },
+                { q: "ihr *", a: "findet" },
+                { q: "sie/Sie *", a: "finden" },
+
+                { subtitle: "möchten (željeti)" },
+                { q: "ich *", a: "möchte" },
+                { q: "du *", a: "möchtest"},
+                { q: "er/sie/es *", a: "möchte" },
+                { q: "wir *", a: "möchten" },
+                { q: "ihr *", a: "möchtet" },
+                { q: "sie/Sie *", a: "möchten" },
+
+                { subtitle: "bleiben (ostati)" },
+                { q: "ich *", a: "bleibe" },
+                { q: "du *", a: "bleibst"},
+                { q: "er/sie/es *", a: "bleibt" },
+                { q: "wir *", a: "bleiben" },
+                { q: "ihr *", a: "bleibt" },
+                { q: "sie/Sie *", a: "bleiben" },
+
+                { subtitle: "backen (peći)" },
+                { q: "ich *", a: "backe" },
+                { q: "du *", a: "backst"},
+                { q: "er/sie/es *", a: "backt" },
+                { q: "wir *", a: "backen" },
+                { q: "ihr *", a: "backt" },
+                { q: "sie/Sie *", a: "backen" },
+
+                { subtitle: "braten (pržiti)" },
+                { q: "ich *", a: "brate" },
+                { q: "du *", a: "brätst"},
+                { q: "er/sie/es *", a: "brät" },
+                { q: "wir *", a: "braten" },
+                { q: "ihr *", a: "bratet" },
+                { q: "sie/Sie *", a: "braten" },
+
+                { subtitle: "spazieren (šetati)" },
+                { q: "ich *", a: "spaziere" },
+                { q: "du *", a: "spazierst"},
+                { q: "er/sie/es *", a: "spaziert" },
+                { q: "wir *", a: "spazieren" },
+                { q: "ihr *", a: "spaziert" },
+                { q: "sie/Sie *", a: "spazieren" },
+
+                { subtitle: "bestellen (naručiti)" },
+                { q: "ich *", a: "bestelle" },
+                { q: "du *", a: "bestellst"},
+                { q: "er/sie/es *", a: "bestellt" },
+                { q: "wir *", a: "bestellen" },
+                { q: "ihr *", a: "bestellt" },
+                { q: "sie/Sie *", a: "bestellen" },
+
+                { subtitle: "zahlen (platiti)" },
+                { q: "ich *", a: "zahle" },
+                { q: "du *", a: "zahlst"},
+                { q: "er/sie/es *", a: "zahlt" },
+                { q: "wir *", a: "zahlen" },
+                { q: "ihr *", a: "zahlt" },
+                { q: "sie/Sie *", a: "zahlen" },
+
+                { subtitle: "nehmen (uzeti)" },
+                { q: "ich *", a: "nehme" },
+                { q: "du *", a: "nimmst"},
+                { q: "er/sie/es *", a: "nimmt" },
+                { q: "wir *", a: "nehmen" },
+                { q: "ihr *", a: "nehmt" },
+                { q: "sie/Sie *", a: "nehmen" },
+
+                { subtitle: "lachen (smijati se)" },
+                { q: "ich *", a: "lache" },
+                { q: "du *", a: "lachst"},
+                { q: "er/sie/es *", a: "lacht" },
+                { q: "wir *", a: "lachen" },
+                { q: "ihr *", a: "lacht" },
+                { q: "sie/Sie *", a: "lachen" },
+
+                { subtitle: "treffen (sresti)" },
+                { q: "ich *", a: "treffe" },
+                { q: "du *", a: "triffst"},
+                { q: "er/sie/es *", a: "trifft" },
+                { q: "wir *", a: "treffen" },
+                { q: "ihr *", a: "trefft" },
+                { q: "sie/Sie *", a: "treffen" },
+
+                { subtitle: "lesen (čitati)" },
+                { q: "ich *", a: "lese" },
+                { q: "du *", a: "liest"},
+                { q: "er/sie/es *", a: "liest" },
+                { q: "wir *", a: "lesen" },
+                { q: "ihr *", a: "lest" },
+                { q: "sie/Sie *", a: "lesen" },
+
+                { subtitle: "fahren (voziti)" },
+                { q: "ich *", a: "fahre" },
+                { q: "du *", a: "fährst"},
+                { q: "er/sie/es *", a: "fährt" },
+                { q: "wir *", a: "fahren" },
+                { q: "ihr *", a: "fahrt" },
+                { q: "sie/Sie *", a: "fahren" },
+
+                { subtitle: "schwimmen (plivati)" },
+                { q: "ich *", a: "schwimme" },
+                { q: "du *", a: "schwimmst"},
+                { q: "er/sie/es *", a: "schwimmt" },
+                { q: "wir *", a: "schwimmen" },
+                { q: "ihr *", a: "schwimmt" },
+                { q: "sie/Sie *", a: "schwimmen" },
+
+                { subtitle: "aufstehen (ustati)" },
+                { q: "ich *", a: "stehe auf" },
+                { q: "du *", a: "stehst auf"},
+                { q: "er/sie/es *", a: "steht auf" },
+                { q: "wir *", a: "stehen auf" },
+                { q: "ihr *", a: "steht auf" },
+                { q: "sie/Sie *", a: "stehen auf" },
+
+                { subtitle: "einkaufen (kupovati špeceraj)" },
+                { q: "ich *", a: "kaufe ein" },
+                { q: "du *", a: "kaufst ein"},
+                { q: "er/sie/es *", a: "kauft ein" },
+                { q: "wir *", a: "kaufen ein" },
+                { q: "ihr *", a: "kauft ein" },
+                { q: "sie/Sie *", a: "kaufen ein" },
+
+                { subtitle: "anrufen (nazvati)" },
+                { q: "ich *", a: "rufe an" },
+                { q: "du *", a: "rufst an"},
+                { q: "er/sie/es *", a: "ruft an" },
+                { q: "wir *", a: "rufen an" },
+                { q: "ihr *", a: "ruft an" },
+                { q: "sie/Sie *", a: "rufen an" },
+
+                { subtitle: "aufräumen (počistiti/pospremiti)" },
+                { q: "ich *", a: "räume auf" },
+                { q: "du *", a: "räumst auf"},
+                { q: "er/sie/es *", a: "räumt auf" },
+                { q: "wir *", a: "räumen auf" },
+                { q: "ihr *", a: "räumt auf" },
+                { q: "sie/Sie *", a: "räumen auf" },
+
+                { subtitle: "fernsehen (gledati tv)" },
+                { q: "ich *", a: "sehe fern" },
+                { q: "du *", a: "siehst fern"},
+                { q: "er/sie/es *", a: "sieht fern" },
+                { q: "wir *", a: "sehen fern" },
+                { q: "ihr *", a: "seht fern" },
+                { q: "sie/Sie *", a: "sehen fern" },
+
+                { subtitle: "anfangen (početi)" },
+                { q: "ich *", a: "fange an" },
+                { q: "du *", a: "fängst an"},
+                { q: "er/sie/es *", a: "fängt an" },
+                { q: "wir *", a: "fangen an" },
+                { q: "ihr *", a: "fangt an" },
+                { q: "sie/Sie *", a: "fangen an" },
+
+                { subtitle: "enden (završiti)" },
+                { q: "ich *", a: "ende" },
+                { q: "du *", a: "endest"},
+                { q: "er/sie/es *", a: "endet" },
+                { q: "wir *", a: "enden" },
+                { q: "ihr *", a: "endet" },
+                { q: "sie/Sie *", a: "enden" },
+
+                { subtitle: "besuchen (posjetiti)" },
+                { q: "ich *", a: "besuche" },
+                { q: "du *", a: "besuchst"},
+                { q: "er/sie/es *", a: "besucht" },
+                { q: "wir *", a: "besuchen" },
+                { q: "ihr *", a: "besucht" },
+                { q: "sie/Sie *", a: "besuchen" },
+
+                { subtitle: "hören (slušati)" },
+                { q: "ich *", a: "höre" },
+                { q: "du *", a: "hörst"},
+                { q: "er/sie/es *", a: "hört" },
+                { q: "wir *", a: "hören" },
+                { q: "ihr *", a: "hört" },
+                { q: "sie/Sie *", a: "hören" },
+
+                { subtitle: "schreiben (pisati)" },
+                { q: "ich *", a: "schreibe" },
+                { q: "du *", a: "schreibst"},
+                { q: "er/sie/es *", a: "schreibt" },
+                { q: "wir *", a: "schreiben" },
+                { q: "ihr *", a: "schreibt" },
+                { q: "sie/Sie *", a: "schreiben" },
+            ]
+        },
+        {
+            title: "Glagoli - prezent - a12",
+            random: false,
+            questions: [
+                { subtitle: "kennen (upoznati)" },
+                { q: "ich *", a: "kenne" },
+                { q: "du *", a: "kennst"},
+                { q: "er/sie/es *", a: "kennt" },
+                { q: "wir *", a: "kennen" },
+                { q: "ihr *", a: "kennt" },
+                { q: "sie/Sie *", a: "kennen" },
+
+                { subtitle: "wählen (izabrati)" },
+                { q: "ich *", a: "wähle" },
+                { q: "du *", a: "wählst"},
+                { q: "er/sie/es *", a: "wählt" },
+                { q: "wir *", a: "wählen" },
+                { q: "ihr *", a: "wählt" },
+                { q: "sie/Sie *", a: "wählen" },
+
+                { subtitle: "stören (smetati, gnjaviti)" },
+                { q: "ich *", a: "störe" },
+                { q: "du *", a: "störst"},
+                { q: "er/sie/es *", a: "stört" },
+                { q: "wir *", a: "stören" },
+                { q: "ihr *", a: "stört" },
+                { q: "sie/Sie *", a: "stören" },
+
+                { subtitle: "reklamieren (reklamirati)" },
+                { q: "ich *", a: "reklamiere" },
+                { q: "du *", a: "reklamierst"},
+                { q: "er/sie/es *", a: "reklamiert" },
+                { q: "wir *", a: "reklamieren" },
+                { q: "ihr *", a: "reklamiert" },
+                { q: "sie/Sie *", a: "reklamieren" },
+
+                { subtitle: "reparieren (popraviti)" },
+                { q: "ich *", a: "repariere" },
+                { q: "du *", a: "reparierst"},
+                { q: "er/sie/es *", a: "repariert" },
+                { q: "wir *", a: "reparieren" },
+                { q: "ihr *", a: "repariert" },
+                { q: "sie/Sie *", a: "reparieren" },
+
+                { subtitle: "faulenzen (ljenčariti)" },
+                { q: "ich *", a: "faulenze" },
+                { q: "du *", a: "faulenzt"},
+                { q: "er/sie/es *", a: "faulenzt" },
+                { q: "wir *", a: "faulenzen" },
+                { q: "ihr *", a: "faulenzt" },
+                { q: "sie/Sie *", a: "faulenzen" },
+
+                { subtitle: "aufwecken (probuditi)" },
+                { q: "ich *", a: "wecke auf" },
+                { q: "du *", a: "weckst auf"},
+                { q: "er/sie/es *", a: "weckt auf" },
+                { q: "wir *", a: "wecken auf" },
+                { q: "ihr *", a: "weckt auf" },
+                { q: "sie/Sie *", a: "wecken auf" },
+
+                { subtitle: "tragen (nositi)" },
+                { q: "ich *", a: "trage" },
+                { q: "du *", a: "tragst"},
+                { q: "er/sie/es *", a: "tragt" },
+                { q: "wir *", a: "tragen" },
+                { q: "ihr *", a: "tragt" },
+                { q: "sie/Sie *", a: "tragen" },
+
+                { subtitle: "wählen (izabrati)" },
+                { q: "ich *", a: "wähle" },
+                { q: "du *", a: "wählst"},
+                { q: "er/sie/es *", a: "wählt" },
+                { q: "wir *", a: "wählen" },
+                { q: "ihr *", a: "wählt" },
+                { q: "sie/Sie *", a: "wählen" },
+
+                { subtitle: "benutzen (upotrijebiti)" },
+                { q: "ich *", a: "benutze" },
+                { q: "du *", a: "benutzt"},
+                { q: "er/sie/es *", a: "benutzt" },
+                { q: "wir *", a: "benutzen" },
+                { q: "ihr *", a: "benutzt" },
+                { q: "sie/Sie *", a: "benutzen" },
+
+                { subtitle: "husten (kašljati)" },
+                { q: "ich *", a: "huste" },
+                { q: "du *", a: "hustest"},
+                { q: "er/sie/es *", a: "hustet" },
+                { q: "wir *", a: "husten" },
+                { q: "ihr *", a: "hustet" },
+                { q: "sie/Sie *", a: "husten" },
+
+                { subtitle: "messen (mjeriti)" },
+                { q: "ich *", a: "messe" },
+                { q: "du *", a: "misst"},
+                { q: "er/sie/es *", a: "misst" },
+                { q: "wir *", a: "messen" },
+                { q: "ihr *", a: "messt" },
+                { q: "sie/Sie *", a: "messen" },
+
+                { subtitle: "verpassen (propustiti)" },
+                { q: "ich *", a: "verpasse" },
+                { q: "du *", a: "verpasst"},
+                { q: "er/sie/es *", a: "verpasst" },
+                { q: "wir *", a: "verpassen" },
+                { q: "ihr *", a: "verpasst" },
+                { q: "sie/Sie *", a: "verpassen" },
+
+                { subtitle: "warten (čekati)" },
+                { q: "ich *", a: "warte" },
+                { q: "du *", a: "wartest"},
+                { q: "er/sie/es *", a: "wartet" },
+                { q: "wir *", a: "warten" },
+                { q: "ihr *", a: "wartet" },
+                { q: "sie/Sie *", a: "warten" },
+
+                { subtitle: "kühlen (hladiti)" },
+                { q: "ich *", a: "kühle" },
+                { q: "du *", a: "kühlst"},
+                { q: "er/sie/es *", a: "kühlt" },
+                { q: "wir *", a: "kühlen" },
+                { q: "ihr *", a: "kühlt" },
+                { q: "sie/Sie *", a: "kühlen" },
+
+                { subtitle: "ausfüllen (ispuniti)" },
+                { q: "ich *", a: "fülle aus" },
+                { q: "du *", a: "füllst aus"},
+                { q: "er/sie/es *", a: "füllt aus" },
+                { q: "wir *", a: "füllen aus" },
+                { q: "ihr *", a: "füllt aus" },
+                { q: "sie/Sie *", a: "füllen aus" },
+
+                { subtitle: "verwenden (upotrijebiti)" },
+                { q: "ich *", a: "verwende" },
+                { q: "du *", a: "verwendest"},
+                { q: "er/sie/es *", a: "verwendet" },
+                { q: "wir *", a: "verwenden" },
+                { q: "ihr *", a: "verwendet" },
+                { q: "sie/Sie *", a: "verwenden" },
+
+                { subtitle: "fühlen (osjećati)" },
+                { q: "ich *", a: "fühle" },
+                { q: "du *", a: "fühlst"},
+                { q: "er/sie/es *", a: "fühlt" },
+                { q: "wir *", a: "fühlen" },
+                { q: "ihr *", a: "fühlt" },
+                { q: "sie/Sie *", a: "fühlen" },
+
+                { subtitle: "ändern (promijeniti)" },
+                { q: "ich *", a: "ändere" },
+                { q: "du *", a: "änderst"},
+                { q: "er/sie/es *", a: "ändert" },
+                { q: "wir *", a: "ändern" },
+                { q: "ihr *", a: "ändert" },
+                { q: "sie/Sie *", a: "ändern" },
+
+                { subtitle: "putzen (čistiti)" },
+                { q: "ich *", a: "putze" },
+                { q: "du *", a: "putzt"},
+                { q: "er/sie/es *", a: "putzt" },
+                { q: "wir *", a: "putzen" },
+                { q: "ihr *", a: "putzt" },
+                { q: "sie/Sie *", a: "putzen" },
+
+                { subtitle: "abgeben (ostaviti)" },
+                { q: "ich *", a: "gebe ab" },
+                { q: "du *", a: "gibst ab"},
+                { q: "er/sie/es *", a: "gibt ab" },
+                { q: "wir *", a: "geben ab" },
+                { q: "ihr *", a: "gebt ab" },
+                { q: "sie/Sie *", a: "geben ab" },
+
+                { subtitle: "ausfüllen (ispuniti)" },
+                { q: "ich *", a: "fülle aus" },
+                { q: "du *", a: "füllst aus"},
+                { q: "er/sie/es *", a: "füllt aus" },
+                { q: "wir *", a: "füllen aus" },
+                { q: "ihr *", a: "füllt aus" },
+                { q: "sie/Sie *", a: "füllen aus" },
+
+                { subtitle: "helfen (pomoći)" },
+                { q: "ich *", a: "helfe" },
+                { q: "du *", a: "hilfst"},
+                { q: "er/sie/es *", a: "hilft" },
+                { q: "wir *", a: "helfen" },
+                { q: "ihr *", a: "helft" },
+                { q: "sie/Sie *", a: "helfen" },
+
+                { subtitle: "mitnehmen (uzeti sa sobom)" },
+                { q: "ich *", a: "nehme mit" },
+                { q: "du *", a: "nimmst mit"},
+                { q: "er/sie/es *", a: "nimmt mit" },
+                { q: "wir *", a: "nehmen mit" },
+                { q: "ihr *", a: "nehmt mit" },
+                { q: "sie/Sie *", a: "nehmen mit" },
+            ]
+        },
+        {
+            title: "Glagoli - past",
+            random: true,
+            questions: [
+                { q: "anfangen * *", a: ["haben", "angefangen"] },
+                { q: "anrufen * *", a: ["haben", "angerufen"] },
+                { q: "anziehen * *", a: ["haben", "angezogen"] },
+                { q: "aufstehen * *", a: ["sein", "aufgestanden"] },
+                { q: "backen * *", a: ["haben", "gebacken"] },
+                { q: "beginnen * *", a: ["haben", "begonnen"] },
+                { q: "bekommen * *", a: ["haben", "bekommen"] },
+//                { q: "bestehen * *", a: ["haben", "bestanden"] },
+                { q: "bieten * *", a: ["haben", "geboten"] },
+                { q: "bitten * *", a: ["haben", "gebeten"] },
+                { q: "bleiben * *", a: ["sein", "geblieben"] },
+//                { q: "brechen * *", a: ["haben", "gebrochen"] },
+                { q: "bringen * *", a: ["haben", "gebracht"] },
+                { q: "denken * *", a: ["haben", "gedacht"] },
+//                { q: "einladen * *", a: ["haben", "eingeladen"] },
+                { q: "einschlafen * *", a: ["sein", "eingeschlafen"] },
+//                { q: "empfehlen * *", a: ["haben", "empfohlen"] },
+//                { q: "entscheiden * *", a: ["haben", "entschieden"] },
+                { q: "essen * *", a: ["haben", "gegessen"] },
+                { q: "fahren * *", a: ["sein", "gefahren"] },
+                { q: "fallen * *", a: ["sein", "gefallen"] },
+                { q: "finden * *", a: ["haben", "gefunden"] },
+                { q: "fliegen * *", a: ["sein", "geflogen"] },
+                { q: "gefallen * *", a: ["haben", "gefallen"] },
+                { q: "gehen * *", a: ["sein", "gegangen"] },
+                { q: "gewinnen * *", a: ["haben", "gewonnen"] },
+                { q: "haben * *", a: ["haben", "gehabt"] },
+                { q: "halten * *", a: ["haben", "gehalten"] },
+                { q: "heißen * *", a: ["haben", "geheißen"] },
+                { q: "helfen * *", a: ["haben", "geholfen"] },
+                { q: "kennen * *", a: ["haben", "gekannt"] },
+                { q: "kommen * *", a: ["sein", "gekommen"] },
+//                { q: "lassen * *", a: ["haben", "gelassen"] },
+                { q: "laufen * *", a: ["sein", "gelaufen"] },
+                { q: "lesen * *", a: ["haben", "gelesen"] },
+//                { q: "liegen * *", a: ["haben", "gelegen"] },
+                { q: "nehmen * *", a: ["haben", "genommen"] },
+//                { q: "nennen * *", a: ["haben", "genannt"] },
+//                { q: "raten * *", a: ["haben", "geraten"] },
+                { q: "rennen * *", a: ["sein", "gerannt"] },
+                { q: "rufen * *", a: ["haben", "gerufen"] },
+                { q: "schlafen * *", a: ["haben", "geschlafen"] },
+//                { q: "schneiden * *", a: ["haben", "geschnitten"] },
+//                { q: "schließen * *", a: ["haben", "geschlossen"] },
+                { q: "schreiben * *", a: ["haben", "geschrieben"] },
+                { q: "schwimmen * *", a: ["sein", "geschwommen"] },
+                { q: "sehen * *", a: ["haben", "gesehen"] },
+                { q: "sein * *", a: ["sein", "gewesen"] },
+                { q: "singen * *", a: ["haben", "gesungen"] },
+                { q: "sitzen * *", a: ["haben", "gesessen"] },
+                { q: "sprechen * *", a: ["haben", "gesprochen"] },
+                { q: "stehen * *", a: ["haben", "gestanden"] },
+//                { q: "steigen * *", a: ["sein", "gestiegen"] },
+//                { q: "streiten * *", a: ["haben", "gestritten"] },
+//                { q: "tragen * *", a: ["haben", "getragen"] },
+                { q: "treffen * *", a: ["haben", "getroffen"] },
+                { q: "trinken * *", a: ["haben", "getrunken"] },
+//                { q: "tun * *", a: ["haben", "getan"] },
+                { q: "vergessen * *", a: ["haben", "vergessen"] },
+//                { q: "verlassen * *", a: ["haben", "verlassen"] },
+//                { q: "verlieren * *", a: ["haben", "verloren"] },
+                { q: "verstehen * *", a: ["haben", "verstanden"] },
+                { q: "waschen * *", a: ["haben", "gewaschen"] },
+//                { q: "werden * *", a: ["sein", "geworden"] },
+                { q: "wissen * *", a: ["haben", "gewusst"] },
+            ]
+        },
+        {
+            title: "Modalni glagoli - prezent",
+            random: false,
+            questions: [
+                { subtitle: "darfen (smjeti)" },
+                { q: "ich *", a: "darf" },
+                { q: "du *", a: "darfst"},
+                { q: "er/sie/es *", a: "darft" },
+                { q: "wir *", a: "dürfen" },
+                { q: "ihr *", a: "dürft" },
+                { q: "sie/Sie *", a: "dürfen" },
+            ]
+        },
+        {
+            title: "Modalni glagoli - prezent",
+            random: false,
+            questions: [
+                { subtitle: "möchten (željeti)" },
+                { q: "ich *", a: "möchte" },
+                { q: "du *", a: "möchtest"},
+                { q: "er/sie/es *", a: "möchte" },
+                { q: "wir *", a: "möchten" },
+                { q: "ihr *", a: "möchtet" },
+                { q: "sie/Sie *", a: "möchten" },
+
+                { subtitle: "müssen (morati)" },
+                { q: "ich *", a: "muss" },
+                { q: "du *", a: "musst"},
+                { q: "er/sie/es *", a: "muss" },
+                { q: "wir *", a: "müssen" },
+                { q: "ihr *", a: "müsst" },
+                { q: "sie/Sie *", a: "müssen" },
+
+                { subtitle: "wollen (željeti)" },
+                { q: "ich *", a: "will" },
+                { q: "du *", a: "willst"},
+                { q: "er/sie/es *", a: "will" },
+                { q: "wir *", a: "wollen" },
+                { q: "ihr *", a: "wollt" },
+                { q: "sie/Sie *", a: "wollen" },
+
+                { subtitle: "mögen (sviđati se)" },
+                { q: "ich *", a: "mag" },
+                { q: "du *", a: "magst"},
+                { q: "er/sie/es *", a: "mag" },
+                { q: "wir *", a: "mögen" },
+                { q: "ihr *", a: "mögt" },
+                { q: "sie/Sie *", a: "mögen" },
+
+                { subtitle: "können (moći)" },
+                { q: "ich *", a: "kann" },
+                { q: "du *", a: "kannst"},
+                { q: "er/sie/es *", a: "kann" },
+                { q: "wir *", a: "können" },
+                { q: "ihr *", a: "könnt" },
+                { q: "sie/Sie *", a: "können" },
+
+                { subtitle: "sollen (trebati)" },
+                { q: "ich *", a: "soll" },
+                { q: "du *", a: "sollst"},
+                { q: "er/sie/es *", a: "soll" },
+                { q: "wir *", a: "sollen" },
+                { q: "ihr *", a: "sollt" },
+                { q: "sie/Sie *", a: "sollen" },
+
+                { subtitle: "dürfen (smjeti)" },
+                { q: "ich *", a: "darf" },
+                { q: "du *", a: "darfst"},
+                { q: "er/sie/es *", a: "darf" },
+                { q: "wir *", a: "dürfen" },
+                { q: "ihr *", a: "dürft" },
+                { q: "sie/Sie *", a: "dürfen" },
+            ]
+        },
+        {
+            title: "Modalni glagoli - past",
+            random: false,
+            questions: [
+                { subtitle: "sein (biti)" },
+                { q: "ich *", a: "war" },
+                { q: "du *", a: "warst"},
+                { q: "er/sie/es *", a: "war" },
+                { q: "wir *", a: "waren" },
+                { q: "ihr *", a: "wart" },
+                { q: "sie/Sie *", a: "waren" },
+
+                { subtitle: "habe (imati)" },
+                { q: "ich *", a: "hatte" },
+                { q: "du *", a: "hattest"},
+                { q: "er/sie/es *", a: "hatte" },
+                { q: "wir *", a: "hatten" },
+                { q: "ihr *", a: "hattet" },
+                { q: "sie/Sie *", a: "hatten" },
+            ]
+        },
+        {
+            title: "Glagoli - prijevod - a11",
+            random: true,
+            questions: [
+                { q: "sein *", a: "biti" },
+                { q: "habe *", a: "imati" },
+                { q: "komme *", a: "dolaziti" },
+                { q: "wohne *", a: "stanovati" },
+                { q: "leben *", a: "živjeti" },
+                { q: "heiße *", a: "zvati" },
+                { q: "arbeit *", a: "raditi" },
+                { q: "machen *", a: "raditi" },
+                { q: "sprechen *", a: "pričati" },
+                { q: "essen *", a: "jesti" },
+                { q: "bekommen *", a: "dobiti" },
+                { q: "brauchen *", a: "trebati" },
+                { q: "kaufen *", a: "kupiti" },
+                { q: "gefallen *", a: "sviđati" },
+                { q: "kochen *", a: "kuhati" },
+                { q: "schlafen *", a: "spavati" },
+                { q: "schauen *", a: "gledati" },
+                { q: "gehen *", a: "ići" },
+                { q: "trinken *", a: "piti" },
+                { q: "dauern *", a: "trajati" },
+                { q: "wandern *", a: "planinariti" },
+                { q: "mögen *", a: "sviđati" },
+                { q: "können *", a: "moći" },
+                { q: "wollen *", a: "htjeti" },
+                { q: "duschen *", a: "tuširati" },
+                { q: "singen *", a: "pjevati" },
+                { q: "waschen *", a: "prati" },
+                { q: "zeichnen *", a: "slikati" },
+                { q: "reiten *", a: "jahati" },
+                { q: "wissen *", a: "znati" },
+                { q: "klettern *", a: "planinariti" },
+                { q: "geben *", a: "davati" },
+                { q: "leihen *", a: "posuditi" },
+                { q: "finden *", a: "smatrati" },
+                { q: "möchten *", a: "željeti" },
+                { q: "bleiben *", a: "ostati" },
+                { q: "backen *", a: "peći" },
+                { q: "braten *", a: "pržiti" },
+                { q: "spazieren *", a: "šetati" },
+                { q: "bestellen *", a: "naručiti" },
+                { q: "zahlen *", a: "platiti" },
+                { q: "nehmen *", a: "uzeti" },
+                { q: "lachen *", a: "smijati" },
+                { q: "treffen *", a: "sresti" },
+                { q: "lesen *", a: "čitati" },
+                { q: "fahren *", a: "voziti" },
+                { q: "schwimmen *", a: "plivati" },
+                { q: "aufstehen *", a: "ustati" },
+                { q: "einkaufen *", a: "kupovati" },
+                { q: "anrufen *", a: "nazvati" },
+                { q: "aufräumen *", a: "pospremiti" },
+                { q: "fernsehen *", a: "gledati tv" },
+                { q: "anfangen *", a: "početi" },
+                { q: "enden *", a: "završiti" },
+                { q: "besuchen *", a: "posjetiti" },
+                { q: "hören *", a: "slušati" },
+                { q: "schreiben *", a: "pisati" },
+            ]
+        },
+        {
+            title: "Glagoli - prijevod (DE > HR) - a12",
+            random: true,
+            questions: [
+                { q: "anfangen *", a: "početi" },
+                { q: "anrufen *", a: "nazvati" },
+                { q: "anziehen *", a: "obući" },
+                { q: "aufstehen *", a: "ustati" },
+                { q: "backen *", a: "peći" },
+                { q: "beginnen *", a: "početi" },
+                { q: "bekommen *", a: "dobiti" },
+//                { q: "bestehen *", a: "položiti (ispit)" },
+                { q: "bieten *", a: "nuditi" },
+                { q: "bitten *", a: "moliti" },
+                { q: "bleiben *", a: "ostati" },
+//                { q: "brechen *", a: "slomiti" },
+                { q: "bringen *", a: "donijeti" },
+                { q: "denken *", a: "misliti" },
+//                { q: "einladen *", a: "pozvati" },
+                { q: "einschlafen *", a: "zaspati" },
+//                { q: "empfehlen *", a: "preporučiti" },
+//                { q: "entscheiden *", a: "odlučiti" },
+                { q: "essen *", a: "jesti" },
+                { q: "fahren *", a: "voziti" },
+                { q: "fallen *", a: "pasti" },
+                { q: "finden *", a: "pronaći" },
+                { q: "fliegen *", a: "letjeti" },
+                { q: "geben *", a: "dati" },
+                { q: "gefallen *", a: "sviđati se" },
+                { q: "gehen *", a: "ići" },
+                { q: "gewinnen *", a: "pobijediti" },
+                { q: "haben *", a: "imati" },
+                { q: "halten *", a: "držati" },
+                { q: "heißen *", a: "zvati se" },
+                { q: "helfen *", a: "pomoći" },
+                { q: "kennen *", a: "poznavati" },
+                { q: "kommen *", a: "doći" },
+//                { q: "lassen *", a: "pustiti" },
+                { q: "laufen *", a: "trčati" },
+                { q: "lesen *", a: "čitati" },
+//                { q: "liegen *", a: "ležati" },
+                { q: "nehmen *", a: "uzeti" },
+//                { q: "nennen *", a: "zvati" },
+//                { q: "raten *", a: "savjetovati" },
+                { q: "rennen *", a: "trčati" },
+                { q: "rufen *", a: "zvati" },
+                { q: "schlafen *", a: "spavati" },
+//                { q: "schneiden *", a: "rezati" },
+//                { q: "schließen *", a: "zatvoriti" },
+                { q: "schreiben *", a: "pisati" },
+                { q: "schwimmen *", a: "plivati" },
+                { q: "sehen *", a: "vidjeti" },
+                { q: "sein *", a: "biti" },
+                { q: "singen *", a: "pjevati" },
+                { q: "sitzen *", a: "sjediti" },
+                { q: "sprechen *", a: "pričati" },
+                { q: "stehen *", a: "stajati" },
+//                { q: "steigen *", a: "penjati se" },
+//                { q: "streiten *", a: "svađati se" },
+//                { q: "tragen *", a: "nositi" },
+                { q: "treffen *", a: "sresti" },
+                { q: "trinken *", a: "piti" },
+                { q: "tun *", a: "učiniti" },
+                { q: "vergessen *", a: "zaboraviti" },
+//                { q: "verlassen *", a: "napustiti" },
+//                { q: "verlieren *", a: "izgubiti" },
+                { q: "verstehen *", a: "razumjeti" },
+                { q: "waschen *", a: "prati" },
+//                { q: "werden *", a: "postati" },
+                { q: "wissen *", a: "znati" },
+            ]
+        },
+        {
+            title: "Glagoli - prijevod (HR > DE) - a12",
+            random: true,
+            questions: [
+                { q: "početi *", a: "anfangen" },
+                { q: "nazvati *", a: "anrufen" },
+                { q: "obući *", a: "anziehen" },
+                { q: "ustati *", a: "aufstehen" },
+                { q: "peći *", a: "backen" },
+                { q: "početi *", a: "beginnen" },
+                { q: "dobiti *", a: "bekommen" },
+//                { q: "položiti (ispit) *", a: "bestehen" },
+                { q: "nuditi *", a: "bieten" },
+                { q: "moliti *", a: "bitten" },
+                { q: "ostati *", a: "bleiben" },
+//                { q: "slomiti *", a: "brechen" },
+                { q: "donijeti *", a: "bringen" },
+                { q: "misliti *", a: "denken" },
+//                { q: "pozvati *", a: "einladen" },
+                { q: "zaspati *", a: "einschlafen" },
+//                { q: "preporučiti *", a: "empfehlen" },
+//                { q: "odlučiti *", a: "entscheiden" },
+                { q: "jesti *", a: "essen" },
+                { q: "voziti *", a: "fahren" },
+                { q: "pasti *", a: "fallen" },
+                { q: "pronaći *", a: "finden" },
+                { q: "letjeti *", a: "fliegen" },
+                { q: "dati *", a: "geben" },
+                { q: "sviđati se *", a: "gefallen" },
+                { q: "ići *", a: "gehen" },
+                { q: "pobijediti *", a: "gewinnen" },
+                { q: "imati *", a: "haben" },
+                { q: "držati *", a: "halten" },
+                { q: "zvati se *", a: "heißen" },
+                { q: "pomoći *", a: "helfen" },
+                { q: "poznavati *", a: "kennen" },
+                { q: "doći *", a: "kommen" },
+//                { q: "pustiti *", a: "lassen" },
+                { q: "trčati *", a: "laufen" },
+                { q: "čitati *", a: "lesen" },
+//                { q: "ležati *", a: "liegen" },
+                { q: "uzeti *", a: "nehmen" },
+//                { q: "zvati *", a: "nennen" },
+//                { q: "savjetovati *", a: "raten" },
+                { q: "trčati *", a: "rennen" },
+                { q: "zvati *", a: "rufen" },
+                { q: "spavati *", a: "schlafen" },
+//                { q: "rezati *", a: "schneiden" },
+//                { q: "zatvoriti *", a: "schließen" },
+                { q: "pisati *", a: "schreiben" },
+                { q: "plivati *", a: "schwimmen" },
+                { q: "vidjeti *", a: "sehen" },
+                { q: "biti *", a: "sein" },
+                { q: "pjevati *", a: "singen" },
+                { q: "sjediti *", a: "sitzen" },
+                { q: "pričati *", a: "sprechen" },
+                { q: "stajati *", a: "stehen" },
+//                { q: "penjati se *", a: "steigen" },
+//                { q: "svađati se *", a: "streiten" },
+//                { q: "nositi *", a: "tragen" },
+                { q: "sresti *", a: "treffen" },
+                { q: "piti *", a: "trinken" },
+                { q: "učiniti *", a: "tun" },
+                { q: "zaboraviti *", a: "vergessen" },
+//                { q: "napustiti *", a: "verlassen" },
+//                { q: "izgubiti *", a: "verlieren" },
+                { q: "razumjeti *", a: "verstehen" },
+                { q: "prati *", a: "waschen" },
+//                { q: "postati *", a: "werden" },
+                { q: "znati *", a: "wissen" },
+                { q: "otvoriti (ö) *", a: "öffnen" },
+                { q: "otvoriti (a) *", a: "aufmachen" },
+                { q: "zatvoriti (s) *", a: "schließen" },
+                { q: "zatvoriti (z) *", a: "zumachen" },
+                { q: "nositi *", a: "tragen" },
+                { q: "uzeti (sa sobom) *", a: "mitnehmen" },
+            ]
+        },
+        {
+            title: "Brojevi",
+            random: true,
+            questions: [
+                { q: "1 *", a: "eins" },
+                { q: "2 *", a: "zwei" },
+                { q: "3 *", a: "drei" },
+                { q: "4 *", a: "vier" },
+                { q: "5 *", a: "fünf" },
+                { q: "6 *", a: "sechs" },
+                { q: "7 *", a: "sieben" },
+                { q: "8 *", a: "acht" },
+                { q: "9 *", a: "neun" },
+                { q: "10 *", a: "zehn" },
+                { q: "11 *", a: "elf" },
+                { q: "12 *", a: "zwölf" },
+                { q: "13 *", a: "dreizehn" },
+                { q: "14 *", a: "vierzehn" },
+                { q: "15 *", a: "fünfzehn" },
+                { q: "16 *", a: "sechzehn" },
+                { q: "17 *", a: "siebzehn" },
+                { q: "18 *", a: "achtzehn" },
+                { q: "19 *", a: "neunzehn" },
+                { q: "20 *", a: "zwanzig" },
+                { q: "30 *", a: "dreißig" },
+                { q: "40 *", a: "vierzig" },
+                { q: "50 *", a: "fünfzig" },
+                { q: "60 *", a: "sechzig" },
+                { q: "70 *", a: "siebzig" },
+                { q: "80 *", a: "achtzig" },
+                { q: "90 *", a: "neunzig" },
+                { q: "100 *", a: "hundert" },
+                { q: "prvi *", a: "erste" },
+                { q: "drugi *", a: "zweite" },
+                { q: "treći *", a: "dritte" },
+                { q: "četvrti *", a: "vierte" },
+                { q: "posljednji *", a: "letzt" },
+
+            ]
+        },
+        {
+            title: "Upitne riječi",
+            random: true,
+            questions: [
+                { q: "tko *", a: "wer" },
+                { q: "gdje *", a: "wo" },
+                { q: "odakle *", a: "woher" },
+                { q: "što *", a: "was" },
+                { q: "kako/koliko *", a: "wie" },
+                { q: "koji *", a: "welche" },
+                { q: "zašto *", a: "warum" },
+                { q: "kuda *", a: "wohin" },
+                { q: "kada *", a: "wann" },
+                { q: "s čim *", a: "womit" },
+                { q: "s kim *", a: "Mit wem" },
+            ]
+        },
+        {
+            title: "Zamjenice - nominativ",
+            random: true,
+            questions: [
+                { q: "ja *", a: "ich", caseSensitive: true },
+                { q: "ti *", a: "du", caseSensitive: true },
+                { q: "on * ona * ono *", a: ["er", "sie", "es"], caseSensitive: true },
+                { q: "mi *", a: "wir", caseSensitive: true },
+                { q: "vi *", a: "ihr", caseSensitive: true },
+                { q: "oni * Vi *", a: ["sie", "Sie"], caseSensitive: true }
+            ]
+        },
+        {
+            title: "Zamjenice - dativ",
+            random: true,
+            questions: [
+                { q: "ja *", a: "mir", caseSensitive: true },
+                { q: "ti *", a: "dir", caseSensitive: true },
+                { q: "on *", a: "ihm", caseSensitive: true },
+                { q: "ona *", a: "ihr", caseSensitive: true },
+                { q: "ono *", a: "ihm", caseSensitive: true },
+                { q: "mi *", a: "uns", caseSensitive: true },
+                { q: "vi *", a: "euch", caseSensitive: true },
+                { q: "oni * Vi *", a: ["ihnen", "Ihnen"], caseSensitive: true }
+            ]
+        },
+        {
+            title: "Zamjenice - akuzativ",
+            random: true,
+            questions: [
+                { q: "ja *", a: "mich", caseSensitive: true },
+                { q: "ti *", a: "dich", caseSensitive: true },
+                { q: "on *", a: "ihn", caseSensitive: true },
+                { q: "ona *", a: "sie", caseSensitive: true },
+                { q: "ono *", a: "es", caseSensitive: true },
+                { q: "mi *", a: "uns", caseSensitive: true },
+                { q: "vi *", a: "euch", caseSensitive: true },
+                { q: "oni * Vi *", a: ["sie", "Sie"], caseSensitive: true }
+            ]
+        },
+        {
+            title: "Hrana",
+            random: true,
+            questions: [
+                { q: "jabuka: * / *", a: ["der Apfel", "die Äpfel"], caseSensitive: true },
+                { q: "kruška: * / *", a: ["die Birne", "die Birnen"], caseSensitive: true },
+                { q: "kruh: * / *", a: ["das Brot", "die Brote"], caseSensitive: true },
+                { q: "jaje: * / *", a: ["das Ei", "die Eier"], caseSensitive: true },
+                { q: "banana: * / *", a: ["die Banane", "die Bananen"], caseSensitive: true },
+                { q: "putar: *", a: "die Butter", caseSensitive: true },
+                { q: "sladoled: *", a: "das Eis", caseSensitive: true },
+                { q: "riba: * / *", a: ["der Fisch", "die Fische"], caseSensitive: true },
+                { q: "meso: *", a: "das Fleisch", caseSensitive: true },
+                { q: "krumpir: * / *", a: ["die Kartoffel", "die Kartoffeln"], caseSensitive: true },
+                { q: "torta: * / *", a: ["der Kuchen", "die Kuchen"], caseSensitive: true },
+                { q: "sir: * / *", a: ["der Käse", "die Käse"], caseSensitive: true },
+                { q: "pekmez: * / *", a: ["die Marmelade", "die Marmeladen"], caseSensitive: true },
+                { q: "naranča: * / *", a: ["die Orange", "die Orangen"], caseSensitive: true },
+                { q: "šunka: * / *", a: ["der Schinken", "die Schinken"], caseSensitive: true },
+                { q: "juha: * / *", a: ["die Suppe", "die Suppen"], caseSensitive: true },
+                { q: "paradajz: * / *", a: ["die Tomate", "die Tomaten"], caseSensitive: true },
+                { q: "kobasica: * / *", a: ["die Wurst", "die Würste"], caseSensitive: true },
+                { q: "hrenovka: * / *", a: ["das Würstchen", "die Würstchen"], caseSensitive: true },
+                { q: "pecivo: * / *", a: ["das Brötchen", "die Brötchen"], caseSensitive: true },
+                { q: "limun: * / *", a: ["die Zitrone", "die Zitronen"], caseSensitive: true },
+                { q: "čokolada: * / *", a: ["die Schokolade", "die Schokoladen"], caseSensitive: true },
+                { q: "palačinke: * / *", a: ["der Pfannkuchen", "die Pfannkuchen"], caseSensitive: true },
+                { q: "sendvič: * / *", a: ["das Sandwich", "die Sandwiche"], caseSensitive: true },
+                { q: "salata: * / *", a: ["der Salat", "die Salate"], caseSensitive: true },
+                { q: "keks: * / *", a: ["der Keks", "die Kekse"], caseSensitive: true },
+                { q: "voće: *", a: "das Obst", caseSensitive: true },
+                { q: "povrće: *", a: "das Gemüse", caseSensitive: true },
+                { q: "pahuljice: * / *", a: ["die Haferflocke", "die Haferflocken"], caseSensitive: true },
+                { q: "doručak: * / *", a: ["das Frühstück", "die Frühstücke"], caseSensitive: true },
+                { q: "ručak: * / *", a: ["das Mittagessen", "die Mittagessen"], caseSensitive: true },
+                { q: "večera: * / *", a: ["das Abendessen", "die Abendessen"], caseSensitive: true },
+                { q: "jelo: * / *", a: ["das Essen", "die Essen"], caseSensitive: true },
+                { q: "pekara: * / *", a: ["die Bäckerei", "die Bäckereien"], caseSensitive: true },
+                { q: "piletina: * / *", a: ["das Hähnchen", "die Hähnchen"], caseSensitive: true },
+                { q: "glad: * / -", a: "der Hunger", caseSensitive: true },
+                { q: "tuna: * / *", a: ["der Thunfisch", "die Thunfische"], caseSensitive: true },
+                { q: "luk: * / *", a: ["die Zwiebel", "die Zwiebeln"], caseSensitive: true },
+                { q: "lubenica: * / *", a: ["die Wassermelone", "die Wassermelonen"], caseSensitive: true },
+                { q: "jagoda: * / *", a: ["die Erdbeere", "die Erdbeeren"], caseSensitive: true },
+                { q: "grožđe: * / *", a: ["die Traube", "die Trauben"], caseSensitive: true },
+                { q: "trešnja: * / *", a: ["die Kirsche", "die Kirschen"], caseSensitive: true },
+                { q: "šljiva: * / *", a: ["die Pflaume", "die Pflaumen"], caseSensitive: true },
+                { q: "paprika: * / *", a: ["der Paprika", "die Paprikas"], caseSensitive: true },
+                { q: "gljive: * / *", a: ["der Pilz", "die Pilze"], caseSensitive: true },
+                { q: "zelje: * / *", a: ["das Kraut", "die Kräuter"], caseSensitive: true },
+                { q: "češnjak: *", a: "der Knoblauch", caseSensitive: true },
+                { q: "krastavac: * / *", a: ["die Gurke", "die Gurken"], caseSensitive: true },
+                { q: "maslina: * / *", a: ["die Olive", "die Oliven"], caseSensitive: true },
+                { q: "slatkiš: * / *", a: ["die Süßigkeit", "die Süßigkeiten"], caseSensitive: true },
+                { q: "kokošja juha: * / *", a: ["die Hühnersuppe", "die Hühnersuppen"], caseSensitive: true },
+                { q: "čušpajz (paprikaš): * / *", a: ["der Eintopf", "die Eintöpfe"], caseSensitive: true },
+            ]
+        },
+        {
+            title: "Cuga",
+            random: true,
+            questions: [
+                { q: "pivo: * / *", a: ["das Bier", "die Biere"], caseSensitive: true },
+                { q: "jogurt: * / *", a: ["das Joghurt", "die Joghurts"], caseSensitive: true },
+                { q: "kava: * / *", a: ["der Kaffee", "die Kaffees"], caseSensitive: true },
+                { q: "mlijeko: * / *", a: ["die Milch", "die Milche"], caseSensitive: true },
+                { q: "sok od naranče: * / *", a: ["der Orangensaft", "die Orangensäfte"], caseSensitive: true },
+                { q: "čaj: * / *", a: ["der Tee", "die Tees"], caseSensitive: true },
+                { q: "vino: * / *", a: ["der Wein", "die Weine"], caseSensitive: true },
+                { q: "voda: * / *", a: ["das Wasser", "die Wasser"], caseSensitive: true },
+                { q: "med: * / *", a: ["der Honig", "die Honige"], caseSensitive: true },
+                { q: "voćni sok: * / *", a: ["der Fruchtsaft", "die Fruchtsäfte"], caseSensitive: true },
+                { q: "limenka: * / *", a: ["die Dose", "die Dosen"], caseSensitive: true },
+                { q: "umak od rajčice: * / *", a: ["die Tomatensoße", "die Tomatensoßen"], caseSensitive: true },
+                { q: "žeđ: * / -", a: "der Durst", caseSensitive: true },
+                { q: "maslinovo ulje: * / *", a: ["das Olivenöl", "die Olivenöle"], caseSensitive: true },
+                { q: "piće: * / *", a: ["das Getränk", "die Getränke"], caseSensitive: true },
+                { q: "ledeni čaj: * / *", a: ["der Eistee", "die Eistees"], caseSensitive: true },
+                { q: "ledena kava: * / *", a: ["", "die Eiskaffees"], caseSensitive: true },
+            ]
+        },
+        {
+            title: "Obitelj",
+            random: true,
+            questions: [
+                { q: "brat * / *", a: ["der Bruder", "die Brüder"], caseSensitive: true },
+                { q: "sestra * / *", a: ["die Schwester", "die Schwestern"], caseSensitive: true },
+                { q: "braća i sestre * / *", a: ["das Geschwister", "die Geschwister"], caseSensitive: true },
+                { q: "majka * / *", a: ["die Mutter", "die Mütter"], caseSensitive: true },
+                { q: "otac * / *", a: ["der Vater", "die Väter"], caseSensitive: true },
+                { q: "baka * / *", a: ["die Großmutter", "die Großmütter"], caseSensitive: true },
+                { q: "djed * / *", a: ["der Großvater", "die Großväter"], caseSensitive: true },
+                { q: "baka i djed * (plural)", a: "die Großeltern", caseSensitive: true },
+                { q: "teta * / *", a: ["die Tante", "die Tanten"], caseSensitive: true },
+                { q: "ujak * / *", a: ["der Onkel", "die Onkel"], caseSensitive: true },
+                { q: "dječak: * / *", a: ["der Junge", "die Jungen"], caseSensitive: true },
+                { q: "djevojčica: * / *", a: ["das Mädchen", "die Mädchen"], caseSensitive: true },
+                { q: "par: * / *", a: ["das Paar", "die Paare"], caseSensitive: true },
+            ]
+        },
+        {
+            title: "Vrijeme / dani / godišnja doba",
+            random: true,
+            questions: [
+                { q: "godina * / *", a: ["das Jahr", "die Jahre"], caseSensitive: true },
+                { q: "mjesec * / *", a: ["der Monat", "die Monate"], caseSensitive: true },
+                { q: "tjedan * / *", a: ["die Woche", "die Wochen"], caseSensitive: true },
+                { q: "vikend * / *", a: ["das Wochenende", "die Wochenenden"], caseSensitive: true },
+                { q: "vrijeme * / *", a: ["das Wetter", "die Wetter"], caseSensitive: true },
+                { q: "sunce * / *", a: ["die Sonne", "die Sonnen"], caseSensitive: true },
+                { q: "kišobran * / *", a: ["der Regenschirm", "die Regenschirme"], caseSensitive: true },
+                { q: "suncobran * / *", a: ["der Sonnenschirm", "die Sonnenschirme"], caseSensitive: true },
+                { q: "nebo * / *", a: ["der Himmel", "die Himmel"], caseSensitive: true },
+                { q: "strane svijeta * / *", a: ["die Himmelsrichtung", "die Himmelsrichtungen"], caseSensitive: true },
+
+                { q: "jutro *", a: "der Morgen", caseSensitive: true },
+                { q: "prijepodne *", a: "der Vormittag", caseSensitive: true },
+                { q: "podne *", a: "der Mittag", caseSensitive: true },
+                { q: "popodne *", a: "der Nachmittag", caseSensitive: true },
+                { q: "večer *", a: "der Abend", caseSensitive: true },
+                { q: "noć *", a: "die Nacht", caseSensitive: true },
+
+                { q: "sjever *", a: "der Norden", caseSensitive: true },
+                { q: "jug *", a: "der Süden", caseSensitive: true },
+                { q: "istok *", a: "der Osten", caseSensitive: true },
+                { q: "zapad *", a: "der Westen", caseSensitive: true },
+
+                { q: "proljeće *", a: "der Frühling", caseSensitive: true },
+                { q: "ljeto *", a: "der Sommer", caseSensitive: true },
+                { q: "jesen *", a: "der Herbst", caseSensitive: true },
+                { q: "zima *", a: "der Winter", caseSensitive: true },
+
+                { q: "siječanj *", a: "der Januar", caseSensitive: true },
+                { q: "veljača *", a: "der Februar", caseSensitive: true },
+                { q: "ožujak *", a: "der März", caseSensitive: true },
+                { q: "travanj *", a: "der April", caseSensitive: true },
+                { q: "svibanj *", a: "der Mai", caseSensitive: true },
+                { q: "lipanj *", a: "der Juni", caseSensitive: true },
+                { q: "srpanj *", a: "der Juli", caseSensitive: true },
+                { q: "kolovor *", a: "der August", caseSensitive: true },
+                { q: "rujan *", a: "der September", caseSensitive: true },
+                { q: "listopad *", a: "der Oktober", caseSensitive: true },
+                { q: "studeni *", a: "der November", caseSensitive: true },
+                { q: "prosinac *", a: "der Dezember", caseSensitive: true },
+
+                { q: "zima je (fraza) *", a: "es ist kalt", caseSensitive: true },
+                { q: "toplo je (fraza) *", a: "es ist warm", caseSensitive: true },
+                { q: "vruće je (fraza) *", a: "es ist heiß", caseSensitive: true },
+                { q: "vjetrovito je (fraza) *", a: "es ist windig", caseSensitive: true },
+                { q: "malovito je (fraza) *", a: "es ist neblig", caseSensitive: true },
+                { q: "oblačno je (fraza) *", a: "es ist wolkig", caseSensitive: true },
+                { q: "naoblačeno (fraza) *", a: "es ist bewölkt", caseSensitive: true },
+                { q: "sunčano je (fraza) *", a: "es ist sonnig", caseSensitive: true },
+                { q: "sija sunce (fraza) *", a: "die Sonne scheint", caseSensitive: true },
+                { q: "sniježi (fraza) *", a: "es schneit", caseSensitive: true },
+
+                { q: "pada kiša (fraza) *", a: "es regnet", caseSensitive: true },
+
+                { q: "najdraže godišnje doba * / *", a: ["die Lieblingsjahreszeit", "die Lieblingsjahreszeiten"], caseSensitive: true },
+            ]
+        },
+        {
+            title: "Zanimanja",
+            random: true,
+            questions: [
+                { q: "student: * / *", a: ["der Student", "die Studenten"], caseSensitive: true },
+                { q: "studentica: * / *", a: ["die Studentin", "die Studentinnen"], caseSensitive: true },
+                { q: "inženjer: * / *", a: ["der Ingenieur", "die Ingenieure"], caseSensitive: true },
+                { q: "učitelj: * / *", a: ["der Lehrer", "die Lehrer"], caseSensitive: true },
+                { q: "učiteljica: * / *", a: ["die Lehrerin", "die Lehrerinnen"], caseSensitive: true },
+                { q: "policajac: * / *", a: ["der Polizist", "die Polizisten"], caseSensitive: true },
+                { q: "policajka: * / *", a: ["die Polizistin", "die Polizistinnen"], caseSensitive: true },
+                { q: "arhitekt: * / *", a: ["der Architekt", "die Architekten"], caseSensitive: true },
+                { q: "arhitektica: * / *", a: ["die Architektin", "die Architektinnen"], caseSensitive: true },
+                { q: "konobar: * / *", a: ["der Kellner", "die Kellner"], caseSensitive: true },
+                { q: "konobarica: * / *", a: ["die Kellnerin", "die Kellnerinnen"], caseSensitive: true },
+                { q: "kuhar: * / *", a: ["der Koch", "die Köche"], caseSensitive: true },
+                { q: "kuharica: * / *", a: ["die Köchin", "die Köchinnen"], caseSensitive: true },
+                { q: "doktor: * / *", a: ["der Arzt", "die Ärzte"], caseSensitive: true },
+                { q: "doktorica: * / *", a: ["die Ärztin", "die Ärztinnen"], caseSensitive: true },
+                { q: "medicinska sestra: * / *", a: ["die Krankenschwester", "die Krankenschwestern"], caseSensitive: true },
+                { q: "medicinski brat: * / *", a: ["der Krankenpfleger", "die Krankenpfleger"], caseSensitive: true },
+                { q: "kućanica: * / *", a: ["die Hausfrau", "die Hausfrauen"], caseSensitive: true },
+                { q: "muška kućanica: * / *", a: ["der Hausmann", "die Hausmänner"], caseSensitive: true },
+                { q: "prodavač: * / *", a: ["der Verkäufer", "die Verkäufer"], caseSensitive: true },
+                { q: "prodavačica: * / *", a: ["die Verkäuferin", "die Verkäuferinnen"], caseSensitive: true },
+                { q: "mehaničar: * / *", a: ["der Mechaniker", "die Mechaniker"], caseSensitive: true },
+                { q: "građevinar: * / *", a: ["der Bauingenieur", "die Bauingenieure"], caseSensitive: true },
+                { q: "tajnica: * / *", a: ["die Sekretärin", "die Sekretärinnen"], caseSensitive: true },
+                { q: "frizerka: * / *", a: ["die Friseurin", "die Friseurinnen"], caseSensitive: true },
+                { q: "fizioterapeutkinja: * / *", a: ["die Physiotherapeutin", "die Physiotherapeutinnen"], caseSensitive: true },
+                { q: "novinar: * / *", a: ["der Journalist", "die Journalisten"], caseSensitive: true },
+                { q: "domar: * / *", a: ["der Hausmann", "die Hausmänner"], caseSensitive: true },
+                { q: "babysitterica: * / *", a: ["die Babysitterin", "die Babysitterinnen"], caseSensitive: true },
+                { q: "učenik: * / *", a: ["der Schüler", "die Schüler"], caseSensitive: true },
+                { q: "učenica: * / *", a: ["der Schülerin", "die Schülerinnen"], caseSensitive: true },
+                { q: "recepcionistkinja (kao medicinska sestra): * / *", a: ["die Arzthelferin", "die Arzthelferinnen"], caseSensitive: true },
+            ]
+        },
+        {
+            title: "Boje",
+            random: true,
+            questions: [
+                { q: "crvena: *", a: "rot", caseSensitive: true },
+                { q: "zelena: *", a: "grün", caseSensitive: true },
+                { q: "bijela: *", a: "weiß", caseSensitive: true },
+                { q: "smeđa: *", a: "braun", caseSensitive: true },
+                { q: "narančasta: *", a: "orange", caseSensitive: true },
+                { q: "žuta: *", a: "gelb", caseSensitive: true },
+                { q: "ljubičasta: *", a: "violett", caseSensitive: true },
+                { q: "plava: *", a: "blau", caseSensitive: true },
+                { q: "crna: *", a: "schwarz", caseSensitive: true }
+            ]
+        },
+        {
+            title: "Kuća",
+            random: true,
+            questions: [
+                { q: "stan: * / *", a: ["die Wohnung", "die Wohnungen"], caseSensitive: true },
+                { q: "kuća: * / *", a: ["das Haus", "die Häuser"], caseSensitive: true },
+                { q: "kuhinja: * / *", a: ["die Küche", "die Küchen"], caseSensitive: true },
+                { q: "balkon: * / *", a: ["der Balkon", "die Balkone"], caseSensitive: true },
+                { q: "stolica: * / *", a: ["der Stuhl", "die Stühle"], caseSensitive: true },
+                { q: "stol: * / *", a: ["der Tisch", "die Tische"], caseSensitive: true },
+                { q: "krevet: * / *", a: ["der Bett", "die Betten"], caseSensitive: true },
+                { q: "soba: * / *", a: ["das Zimmer", "die Zimmer"], caseSensitive: true },
+                { q: "dnevna soba: * / *", a: ["das Wohnzimmer", "die Wohnzimmer"], caseSensitive: true },
+                { q: "hodnik: * / *", a: ["der Flur", "die Flure"], caseSensitive: true },
+                { q: "radna soba: * / *", a: ["das Arbeitszimmer", "die Arbeitszimmer"], caseSensitive: true },
+                { q: "wc: * / *", a: ["die Toilette", "die Toiletten"], caseSensitive: true },
+                { q: "hladnjak: * / *", a: ["der Kühlschrank", "die Kühlschränke"], caseSensitive: true },
+                { q: "kupaona: * / *", a: ["das Bad", "die Bäder"], caseSensitive: true },
+                { q: "kupaona: * / *", a: ["das Badezimmer", "die Badezimmer"], caseSensitive: true },
+                { q: "dječja soba: * / *", a: ["das Kinderzimmer", "die Kinderzimmer"], caseSensitive: true },
+                { q: "spavaća soba: * / *", a: ["das Schlafzimmer", "die Schlafzimmer"], caseSensitive: true },
+                { q: "namještaj: * / *", a: ["das Möbel", "die Möbel"], caseSensitive: true },
+                { q: "prvi kat: *", a: "erster Stock", caseSensitive: true },
+                { q: "drugi kat: *", a: "zweier Stock", caseSensitive: true },
+                { q: "tuš: * / *", a: ["die Dusche", "die Duschen"], caseSensitive: true },
+                { q: "fotelja: * / *", a: ["der Sessel", "die Sessel"], caseSensitive: true },
+                { q: "polica: * / *", a: ["das Regal", "die Regale"], caseSensitive: true },
+                { q: "sofa: * / *", a: ["das Sofa", "die Sofas"], caseSensitive: true },
+                { q: "tepih: * / *", a: ["der Teppich", "die Teppiche"], caseSensitive: true },
+                { q: "lampa: * / *", a: ["die Lampe", "die Lampen"], caseSensitive: true },
+                { q: "radni stol: * / *", a: ["der Schreibtisch", "die Schreibtische"], caseSensitive: true },
+                { q: "deka: * / *", a: ["die Decke", "die Decken"], caseSensitive: true },
+                { q: "šator: * / *", a: ["der Schatten", "die Schatten"], caseSensitive: true },
+                { q: "prozor * / *", a: ["das Fenster", "die Fenster"], caseSensitive: true },
+                { q: "zid * / *", a: ["die Wand", "die Wände"], caseSensitive: true },
+                { q: "vrata * / *", a: ["die Tür", "die Türen"], caseSensitive: true },
+            ]
+        },
+        {
+            title: "Tijelo/zdravlje",
+            random: true,
+            questions: [
+                { q: "tijelo * / *", a: ["der Körper", "die Körper"], caseSensitive: true },
+                { q: "dio tijela * / *", a: ["der Körperteil", "die Körperteile"], caseSensitive: true },
+                { q: "kosa * / *", a: ["das Haar", "die Haare"], caseSensitive: true },
+                { q: "glava * / *", a: ["der Kopf", "die Köpfe"], caseSensitive: true },
+                { q: "uho * / *", a: ["das Ohr", "die Ohren"], caseSensitive: true },
+                { q: "oko * / *", a: ["das Auge", "die Augen"], caseSensitive: true },
+                { q: "nos * / *", a: ["die Nase", "die Nasen"], caseSensitive: true },
+                { q: "usta * / *", a: ["der Mund", "die Münder"], caseSensitive: true },
+                { q: "grlo * / *", a: ["der Hals", "die Hälse"], caseSensitive: true },
+                { q: "prsa * / *", a: ["die Brust", "die Brüste"], caseSensitive: true },
+                { q: "ruka (od ramena) * / *", a: ["der Arm", "die Arme"], caseSensitive: true },
+                { q: "ruka (od zapešća) * / *", a: ["die Hand", "die Hände"], caseSensitive: true },
+                { q: "leđa * / *", a: ["der Rücken", "die Rücken"], caseSensitive: true },
+                { q: "trbuh * / *", a: ["der Bauch", "die Bäuche"], caseSensitive: true },
+                { q: "prst * / *", a: ["der Finger", "die Finger"], caseSensitive: true },
+                { q: "noga (od struka) * / *", a: ["das Bein", "die Beine"], caseSensitive: true },
+                { q: "noga * / *", a: ["der Fuß", "die Füße"], caseSensitive: true },
+                { q: "zub * / *", a: ["der Zahn", "die Zähne"], caseSensitive: true },
+                { q: "lice * / *", a: ["das Gesicht", "die Gesichter"], caseSensitive: true },
+                { q: "temperatura * / *", a: ["das Fieber", "die Fieber"], caseSensitive: true },
+                { q: "bol * / *", a: ["der Schmerz", "die Schmerzen"], caseSensitive: true },
+                { q: "čekaonica * / *", a: ["der Wertebereich", "die Wertebereiche"], caseSensitive: true },
+                { q: "zdravlje (sg.) *", a: "die Gesundheit", caseSensitive: true },
+                { q: "bolest * / *", a: ["die Krankheit", "die Krankheiten"], caseSensitive: true },
+                { q: "prometna nesreća * / *", a: ["der Unfall", "die Unfälle"], caseSensitive: true },
+                { q: "gripa * / *", a: ["die Grippe", "die Grippen"], caseSensitive: true },
+                { q: "prehlada * / *", a: ["die Erkältung", "die Erkältungen"], caseSensitive: true },
+                { q: "krema * / *", a: ["die Creme", "die Cremes"], caseSensitive: true },
+                { q: "kapi za oči (pl.) *", a: "die Augentropfen", caseSensitive: true },
+                { q: "rakija * / *", a: ["der Schnaps", "die Schnäpse"], caseSensitive: true },
+                { q: "hitna * / *", a: ["die Notaufnahme", "die Notaufnahmen"], caseSensitive: true },
+            ]
+        },
+        {
+            title: "Odjeća",
+            random: true,
+            questions: [
+                { q: "kapa * / *", a: ["die Mütze", "die Mützen"], caseSensitive: true },
+                { q: "ženska košulja * / *", a: ["die Bluse", "die Blusen"], caseSensitive: true },
+                { q: "čizme * / *", a: ["der Stiefel", "die Stiefel"], caseSensitive: true },
+                { q: "traperice * / *", a: ["die Jeans", "die Jeans"], caseSensitive: true },
+                { q: "suknja * / *", a: ["der Rock", "die Röcke"], caseSensitive: true },
+                { q: "muška košulja * / *", a: ["das Hemd", "die Hemden"], caseSensitive: true },
+                { q: "majca * / *", a: ["das T-Shirt", "die T-Shirts"], caseSensitive: true },
+                { q: "trenirka (gornji i donji dio) * / *", a: ["der Trainingsanzug", "die Trainingsanzüge"], caseSensitive: true },
+                { q: "cipela * / *", a: ["der Schuh", "die Schuhe"], caseSensitive: true },
+                { q: "tenisica * / *", a: ["der Turnschuh", "die Turnschuhe"], caseSensitive: true },
+                { q: "remen * / *", a: ["der Gürtel", "die Gürtel"], caseSensitive: true },
+                { q: "kravata * / *", a: ["die Krawatte", "die Krawatten"], caseSensitive: true },
+                { q: "sandala * / *", a: ["die Sandale", "die Sandalen"], caseSensitive: true },
+                { q: "papuča * / *", a: ["der Hausschuh", "die Hausschuhe"], caseSensitive: true },
+                { q: "odijelo * / *", a: ["der Anzug", "die Anzüge"], caseSensitive: true },
+                { q: "haljina (Pl. odjeća) * / *", a: ["das Kleid", "die Kleider"], caseSensitive: true },
+                { q: "hlače * / *", a: ["die Hose", "die Hosen"], caseSensitive: true },
+                { q: "pidžama * / *", a: ["das Pyjama", "die Pyjamas"], caseSensitive: true },
+                { q: "kabanica * / *", a: ["der Regenmantel", "die Regenmäntel"], caseSensitive: true },
+                { q: "kratke hlače *", a: "die kurze Hose", caseSensitive: true },
+                { q: "šal * / *", a: ["der Schal", "die Schals"], caseSensitive: true },
+                { q: "šešir * / *", a: ["der Hut", "die Hüte"], caseSensitive: true },
+                { q: "gaće * / *", a: ["die Unterhose", "die Unterhosen"], caseSensitive: true },
+                { q: "potkošulja * / *", a: ["die Unterhemd", "die Unterhemden"], caseSensitive: true },
+                { q: "čarapa * / *", a: ["die Socke", "die Socken"], caseSensitive: true },
+                { q: "prsluk * / *", a: ["die Weste", "die Westen"], caseSensitive: true },
+                { q: "jakna * / *", a: ["die Jacke", "die Jacken"], caseSensitive: true },
+                { q: "vesta * / *", a: ["der Pullover", "die Pullover"], caseSensitive: true },
+                { q: "kupaći kostim * / *", a: ["der Badeanzug", "die Badeanzüge"], caseSensitive: true },
+                { q: "japanke * / *", a: ["die Badeschuh", "die Badeschuhe"], caseSensitive: true },
+                { q: "rukavice * / *", a: ["die Handschuh", "die Handschuhe"], caseSensitive: true },
+            ]
+        },
+        {
+            title: "Random imenice - a11",
+            random: true,
+            questions: [
+                { q: "grad: * / *", a: ["die Stadt", "die Städte"], caseSensitive: true },
+                { q: "plan grada * / *", a: ["der Stadtplan", "die Stadtpläne"], caseSensitive: true },
+                { q: "glavni grad: * / *", a: ["die Hauptstadt", "die Hauptstädte"], caseSensitive: true },
+                { q: "predavanje: * / *", a: ["die Vorlesung", "die Vorlesungen"], caseSensitive: true },
+                { q: "knjiga: * / *", a: ["das Buch", "die Bücher"], caseSensitive: true },
+                { q: "bilježnica: * / *", a: ["das Heft", "die Hefte"], caseSensitive: true },
+                { q: "gumica za brisanje: * / *", a: ["der Radiergummi", "die Radiergummis"], caseSensitive: true },
+                { q: "obična olovka: * / *", a: ["der Bleistift", "die Bleistifte"], caseSensitive: true },
+                { q: "kemijska: * / *", a: ["der Kugelschreiber", "die Kugelschreiber"], caseSensitive: true },
+                { q: "kemijska: * / *", a: ["der Kuli", "die Kulis"], caseSensitive: true },
+                { q: "pješice: *", a: "zu Fuß", caseSensitive: true },
+                { q: "sredina: * / *", a: ["die Mitte", "die Mitten"], caseSensitive: true },
+                { q: "podne: * / *", a: ["der Mittag", "die Mittage"], caseSensitive: true },
+                { q: "dijeta: * / *", a: ["die Diät", "die Diäten"], caseSensitive: true },
+                { q: "cigareta: * / *", a: ["die Zigarette", "die Zigaretten"], caseSensitive: true },
+                { q: "zanimanje: * / *", a: ["der Beruf", "die Berufe"], caseSensitive: true },
+                { q: "mobitel: * / *", a: ["das Handy", "die Handys"], caseSensitive: true },
+                { q: "telefon: * / *", a: ["das Telefon", "die Telefone"], caseSensitive: true },
+                { q: "planina: * / *", a: ["der Berg", "die Berge"], caseSensitive: true },
+                { q: "ispit: * / *", a: ["die Prüfung", "die Prüfungen"], caseSensitive: true },
+                { q: "test: * / *", a: ["der Test", "die Tests"], caseSensitive: true },
+                { q: "riječ: * / *", a: ["das Wort", "die Wörter"], caseSensitive: true },
+                { q: "dio: * / *", a: ["der Teil", "die Teile"], caseSensitive: true },
+                { q: "novac: * / *", a: ["das Geld", "die Gelder"], caseSensitive: true },
+                { q: "džep: * / *", a: ["das Taschengeld", "die Taschengelder"], caseSensitive: true },
+                { q: "slobodno vrijeme: * / *", a: ["die Freizeit", "die Freizeiten"], caseSensitive: true },
+                { q: "godišnji odmor: * / *", a: ["der Urlaub", "die Urlaube"], caseSensitive: true },
+                { q: "izlet: * / *", a: ["der Ausflug", "die Ausflüge"], caseSensitive: true },
+                { q: "poruka: * / *", a: ["die Nachricht", "die Nachrichten"], caseSensitive: true },
+                { q: "konj: * / *", a: ["das Pferd", "die Pferde"], caseSensitive: true },
+                { q: "pekara: * / *", a: ["die Bäckerei", "die Bäckereien"], caseSensitive: true },
+                { q: "rutina: * / *", a: ["die Routine", "die Routinen"], caseSensitive: true },
+                { q: "obveza: * / *", a: ["die Pflicht", "die Pflichten"], caseSensitive: true },
+                { q: "razred: * / *", a: ["die Klasse", "die Klassen"], caseSensitive: true },
+                { q: "učionica: * / *", a: ["das Klassenzimmer", "die Klassenzimmer"], caseSensitive: true },
+                { q: "tečaj njemačkog jezika: * / *", a: ["der Deutschkurs", "die Deutschkurse"], caseSensitive: true },
+                { q: "predavanje: * / *", a: ["der Unterricht", "die Unterrichte"], caseSensitive: true },
+                { q: "predavanje iz njemačkog jezika: *", a: "der Deutschunterricht", caseSensitive: true },
+                { q: "sat: * / *", a: ["die Stunde", "die Stundenn"], caseSensitive: true },
+                { q: "pauza: * / *", a: ["die Pause", "die Pausen"], caseSensitive: true },
+                { q: "nogomet: * / *", a: ["das Fußballspiel", "die Fußballspiele"], caseSensitive: true },
+                { q: "nogometaš: * / *", a: ["der Fußballspieler", "die Fußballspieler"], caseSensitive: true },
+                { q: "frtalj: * / *", a: ["das Viertel", "die Viertel"], caseSensitive: true },
+                { q: "kantina: * / *", a: ["die Mensa", "die Mensen"], caseSensitive: true },
+                { q: "trgovina: * / *", a: ["der Supermarkt", "die Supermärkte"], caseSensitive: true },
+            ]
+        },
+        {
+            title: "Random imenice - a12 [1-50]",
+            random: true,
+            questions: [
+                { q: "škola * / *", a: ["die Schule", "die Schulen"], caseSensitive: true },
+                { q: "škola stranih jezika * / *", a: ["die Sprachenschule", "die Sprachenschulen"], caseSensitive: true },
+                { q: "praksa (kao doktor): * / *", a: ["die Praxis", "die Praxen"], caseSensitive: true },
+                { q: "intervju: * / *", a: ["das Interview", "die Interviews"], caseSensitive: true },
+                { q: "tečaj: * / *", a: ["der Kurs", "die Kurse"], caseSensitive: true },
+                { q: "trening: * / *", a: ["die Ausbildung", "die Ausbildungen"], caseSensitive: true },
+                { q: "praksa (npr. u srednjoj školi) * / *", a: ["das Praktikum", "die Praktika"], caseSensitive: true },
+                { q: "pacijent: * / *", a: ["der Patient", "die Patienten"], caseSensitive: true },
+                { q: "majstor: * / *", a: ["der Meister", "die Meister"], caseSensitive: true },
+                { q: "domar: * / *", a: ["der Hausmeister", "die Hausmeister"], caseSensitive: true },
+                { q: "tema: * / *", a: ["das Thema", "die Theme"], caseSensitive: true },
+                { q: "posao (A) * / *", a: ["die Arbeit", "die Arbeiten"], caseSensitive: true },
+                { q: "posao (J) * / *", a: ["der Job", "die Jobs"], caseSensitive: true },
+                { q: "zanimanje: * / *", a: ["der Beruf", "die Berufe"], caseSensitive: true },
+                { q: "(radno) mjesto: * / *", a: ["die Stelle", "die Stellen"], caseSensitive: true },
+                { q: "avion * / *", a: ["das Flugzeug", "die Flugzeuge"], caseSensitive: true },
+                { q: "stjuardesa (S) * / *", a: ["die Stewardess", "die Stewardessen"], caseSensitive: true },
+                { q: "stjuardesa (F) * / *", a: ["die Flugbegleiterin", "die Flugbegleiterinnen"], caseSensitive: true },
+                { q: "recepcionist (R) * / *", a: ["der Rezeptionist", "die Rezeptionisten"], caseSensitive: true },
+                { q: "recepcionist (H) *", a: "der Hotelfachmann", caseSensitive: true },
+                { q: "izlet * / *", a: ["der Ausflug", "die Ausflüge"], caseSensitive: true },
+                { q: "putovanje * / *", a: ["die Reise", "die Reisen"], caseSensitive: true },
+                { q: "vozna karta * / *", a: ["die Fahrkarte", "die Fahrkarten"], caseSensitive: true },
+                { q: "gost * / *", a: ["der Gast", "die Gäste"], caseSensitive: true },
+                { q: "hotel * / *", a: ["das Hotel", "die Hotels"], caseSensitive: true },
+                { q: "hostel (J) * / *", a: ["die Jugendherberge", "die Jugendherbergen"], caseSensitive: true },
+                { q: "hostel (H) * / *", a: ["das Hostel", "die Hostels"], caseSensitive: true },
+                { q: "osobna iskaznica * / *", a: ["der Personalausweis", "die Personalausweise"], caseSensitive: true },
+                { q: "vozačka dozvola * / *", a: ["der Führerschein", "die Führerscheine"], caseSensitive: true },
+                { q: "putovnica (P) *", a: "der Pass", caseSensitive: true },
+                { q: "obilazak grada * / *", a: ["die Stadtführung", "die Stadtführungen"], caseSensitive: true },
+                { q: "putovnica (R) * / *", a: ["der Reiseführer", "die Reiseführer"], caseSensitive: true },
+                { q: "slastičarnica * / *", a: ["die Konditorei", "die Konditoreien"], caseSensitive: true },
+                { q: "sportska dvorana * / *", a: ["die Sporthalle", "die Sporthallen"], caseSensitive: true },
+                { q: "fitnes centar * / *", a: ["das Fitnesscenter", "die Fitnesscenter"], caseSensitive: true },
+                { q: "prometna gužva * / *", a: ["der Stau", "die Staus"], caseSensitive: true },
+                { q: "vijest * / *", a: ["die Nachricht", "die Nachrichten"], caseSensitive: true },
+                { q: "crkva * / *", a: ["die Kirche", "die Kirchen"], caseSensitive: true },
+                { q: "prtljaga (G) *", a: "das Gepäck", caseSensitive: true },
+                { q: "prtljaga (R) * / *", a: ["die Reisetasche", "die Reisetaschen"], caseSensitive: true },
+                { q: "kofer * / *", a: ["der Koffer", "die Koffer"], caseSensitive: true },
+                { q: "pivovara * / *", a: ["die Brauerei", "die Brauereien"], caseSensitive: true },
+                { q: "dvorac * / *", a: ["das Schloss", "die Schlösser"], caseSensitive: true },
+                { q: "gradska vijećnica * / *", a: ["das Rathaus", "die Rathäuser"], caseSensitive: true },
+                { q: "katedrala * / *", a: ["der Dom", "die Dome"], caseSensitive: true },
+                { q: "kolodvor * / *", a: ["der Bahnhof", "die Bahnhöfe"], caseSensitive: true },
+                { q: "prijedlog (V) * / *", a: ["der Vorschlag", "die Vorschläge"], caseSensitive: true },
+                { q: "prijedlog (T) * / *", a: ["der Tipp", "die Tipps"], caseSensitive: true },
+            ]
+        },
+        {
+            title: "Random imenice - a12 [51-100]",
+            random: true,
+            questions: [
+                { q: "šef * / *", a: ["der Chef", "die Chefs"], caseSensitive: true },
+                { q: "radno iskustvo * / *", a: ["die Berufserfahrung", "die Berufserfahrungen"], caseSensitive: true },
+                { q: "kafić * / *", a: ["das Café", "die Cafés"], caseSensitive: true },
+                { q: "stres * / *", a: ["der Stress", "die Stresse"], caseSensitive: true },
+                { q: "kupac * / *", a: ["der Kunde", "die Kunden"], caseSensitive: true },
+                { q: "restoran * / *", a: ["das Restaurant", "die Restaurants"], caseSensitive: true },
+                { q: "zabava * / *", a: ["der Spaß", "die Späße"], caseSensitive: true },
+                { q: "hobi * / *", a: ["das Hobby", "die Hobbys"], caseSensitive: true },
+                { q: "turist * / *", a: ["der Tourist", "die Touristen"], caseSensitive: true },
+                { q: "zastoj (u prometu) * / *", a: ["die Verspätung", "die Verspätungen"], caseSensitive: true },
+                { q: "željeznica * / *", a: ["die Bahn", "die Bahnen"], caseSensitive: true },
+                { q: "stanica (željeznička) * / *", a: ["der Halt", "die Halte"], caseSensitive: true },
+                { q: "osoba * / *", a: ["die Person", "die Personen"], caseSensitive: true },
+                { q: "gastronomija * / *", a: ["die Gastronomie", "die Gastronomien"], caseSensitive: true },
+                { q: "ekonomija * / *", a: ["die Wirtschaft", "die Wirtschaften"], caseSensitive: true },
+                { q: "matematika *", a: "die Mathematik", caseSensitive: true },
+                { q: "turizam *", a: "der Tourismus", caseSensitive: true },
+                { q: "informatika *", a: "die Informatik", caseSensitive: true },
+                { q: "sveučilište * / *", a: ["die Universität", "die Universitäten"], caseSensitive: true },
+                { q: "menadžment * / *", a: ["das Management", "die Managements"], caseSensitive: true },
+                { q: "novinarstvo (sg.) *", a: "der Journalismus", caseSensitive: true },
+                { q: "kolega * / *", a: ["der Kollege", "die Kollegen"], caseSensitive: true },
+                { q: "odmor (Pl.) *", a: "die Ferien", caseSensitive: true },
+                { q: "ime * / *", a: ["der Name", "die Namen"], caseSensitive: true },
+                { q: "studij * / *", a: ["das Studium", "die Studien"], caseSensitive: true },
+                { q: "tim * / *", a: ["das Team", "die Teams"], caseSensitive: true },
+                { q: "oglas za posao (dugo) * / *", a: ["die Stellenanzeige", "die Stellenanzeigen"], caseSensitive: true },
+                { q: "oglas za posao (kratko) * / *", a: ["die Anzeige", "die Anzeigen "], caseSensitive: true },
+                { q: "sat * / *", a: ["die Uhr", "die Uhren"], caseSensitive: true },
+                { q: "firma * / *", a: ["die Firma", "die Firmen"], caseSensitive: true },
+                { q: "prijava za posao * / *", a: ["die Bewerbung", "die Bewerbungen"], caseSensitive: true },
+                { q: "radno vrijeme * / *", a: ["die Arbeitszeit", "die Arbeitszeiten"], caseSensitive: true },
+                { q: "more * / *", a: ["das Meer", "die Meere"], caseSensitive: true },
+                { q: "dućan (L) * / *", a: ["der Laden", "die Laden"], caseSensitive: true },
+                { q: "dućan (G) * / *", a: ["das Geschäft", "die Geschäfte"], caseSensitive: true },
+                { q: "kupac * / *", a: ["der Kunde", "die Kunden"], caseSensitive: true },
+                { q: "robna kuća * / *", a: ["das Kaufhaus", "die Kaufhäuser"], caseSensitive: true },
+                { q: "šoping centar * / *", a: ["das Einkaufszentrum", "die Einkaufszentren"], caseSensitive: true },
+                { q: "tepih * / *", a: ["der Teppich", "die Teppiche"], caseSensitive: true },
+                { q: "poklon * / *", a: ["das Geschenk", "die Geschenke"], caseSensitive: true },
+                { q: "odjeća * / *", a: ["die Kleidung", "die Kleidungen"], caseSensitive: true },
+                { q: "plastična vrećica * / *", a: ["die Plastiktüte", "die Plastiktüten"], caseSensitive: true },
+                { q: "posebna ponuda * / *", a: ["das Sonderangebot", "die Sonderangebote"], caseSensitive: true },
+                { q: "časopis (Z) * / *", a: ["die Zeitschrift", "die Zeitschriften"], caseSensitive: true },
+                { q: "časopis (M) * / *", a: ["das Magazin", "die Magazine"], caseSensitive: true },
+                { q: "susjed * / *", a: ["der Nachbar", "die Nachbarn"], caseSensitive: true },
+                { q: "susjeda * / *", a: ["die Nachbarin", "die Nachbarinnen"], caseSensitive: true },
+                { q: "frizura * / *", a: ["die Frisur", "die Frisuren"], caseSensitive: true },
+                { q: "šef odjela * / *", a: ["der Abteilungsleiter", "die Abteilungsleiter"], caseSensitive: true },
+                { q: "smijeh: *", a: "das Lachen", caseSensitive: true },
+            ]
+        },
+        {
+            title: "Random imenice - a12 [101-150+]",
+            random: true,
+            questions: [
+                { q: "frizer * / *", a: ["der Friseur", "die Friseure"], caseSensitive: true },
+                { q: "cimer * / *", a: ["der Mitbewohner", "die Mitbewohner"], caseSensitive: true },
+                { q: "cimerica * / *", a: ["der Mitbewohnerin", "die Mitbewohnerinnen"], caseSensitive: true },
+                { q: "zvučnik * / *", a: ["der Lautsprecher", "die Lautsprecher"], caseSensitive: true },
+                { q: "školska ploča * / *", a: ["die Tafel", "die Tafeln"], caseSensitive: true },
+                { q: "kartonska kutija * / *", a: ["die Schachtel", "die Schachteln"], caseSensitive: true },
+                { q: "kamion * / *", a: ["der Lkw", "die Lkws"], caseSensitive: true },
+                { q: "knjižnica * / *", a: ["die Bücherei", "die Büchereien"], caseSensitive: true },
+                { q: "knjižara (BH) * / *", a: ["die Buchhandlung", "die Buchhandlungen"], caseSensitive: true },
+                { q: "knjižara (BL) * / *", a: ["der Buchladen", "die Buchläden"], caseSensitive: true },
+                { q: "stablo * / *", a: ["der Baum", "die Bäume"], caseSensitive: true },
+                { q: "ured (A) * / *", a: ["das Amt", "die Ämter"], caseSensitive: true },
+                { q: "ured (B) * / *", a: ["das Büro", "die Büros"], caseSensitive: true },
+                { q: "strast * / *", a: ["die Leidenschaft", "die Leidenschaften"], caseSensitive: true },
+                { q: "let avionom * / *", a: ["der Ausflug", "die Ausflüge"], caseSensitive: true },
+                { q: "čistačica * / *", a: ["die Putzfrau", "die Putzfrauen"], caseSensitive: true },
+                { q: "autobusna/željeznička postaja * / *", a: ["die Haltestelle", "die Haltestellen"], caseSensitive: true },
+                { q: "cvijet * / *", a: ["die Blume", "die Blumen"], caseSensitive: true },
+                { q: "križanje * / *", a: ["die Kreuzung", "die Kreuzungen"], caseSensitive: true },
+                { q: "ugao * / *", a: ["die Ecke", "die Ecken"], caseSensitive: true },
+                { q: "semafor * / *", a: ["die Ampel", "die Ampeln"], caseSensitive: true },
+                { q: "tramvaj * / *", a: ["die Straßenbahn", "die Straßenbahnen"], caseSensitive: true },
+                { q: "bus * / *", a: ["der Bus", "die Busse"], caseSensitive: true },
+                { q: "auto * / *", a: ["das Auto", "die Autos"], caseSensitive: true },
+                { q: "vlak * / *", a: ["die Zug", "die Züge"], caseSensitive: true },
+                { q: "avion * / *", a: ["das Flugzeug", "die Flugzeuge"], caseSensitive: true },
+                { q: "brod * / *", a: ["das Schiff", "die Schiffe"], caseSensitive: true },
+                { q: "bicikl * / *", a: ["das Fahrrad", "die Fahrräder"], caseSensitive: true },
+                { q: "promet * / *", a: ["der Verkehr", "die Verkehre"], caseSensitive: true },
+                { q: "prometna sredstva * / *", a: ["das Verkehrsmittel", "die Verkehrsmittel"], caseSensitive: true },
+                { q: "lijek * / *", a: ["die Medikament", "die Medikamente"], caseSensitive: true },
+                { q: "ljekarna * / *", a: ["die Apotheke", "die Apotheken"], caseSensitive: true },
+                { q: "benzinska postaja * / *", a: ["die Tankstelle", "die Tankstellen"], caseSensitive: true },
+                { q: "pošta * / *", a: ["die Post", "die Posten"], caseSensitive: true },
+                { q: "mesnica (M) * / *", a: ["die Metzgerei", "die Metzgereien"], caseSensitive: true },
+                { q: "mesnica (F) * / *", a: ["die Fleischerei", "die Fleischereien"], caseSensitive: true },
+                { q: "muzej * / *", a: ["das Museum", "die Museen"], caseSensitive: true },
+                { q: "kino * / *", a: ["das Kino", "die Kinos"], caseSensitive: true },
+                { q: "kazna (npr. za prebrzu vožnju) * / *", a: ["die Strafe", "die Strafen"], caseSensitive: true },
+                { q: "zgrada * / *", a: ["das Gebäude", "die Gebäude"], caseSensitive: true },
+                { q: "kolodvor * / *", a: ["der Bahnhof", "die Bahnhöfe"], caseSensitive: true },
+                { q: "naočale * / *", a: ["die Brille", "die Brillen"], caseSensitive: true },
+                { q: "sunčane naočale * / *", a: ["die Sonnenbrille", "die Sonnenbrillen"], caseSensitive: true },
+                { q: "torba * / *", a: ["die Tasche", "die Taschen"], caseSensitive: true },
+                { q: "ključ * / *", a: ["der Schlüssel", "die Schlüssel"], caseSensitive: true },
+                { q: "predavanje * / *", a: ["der Unterricht", "die Unterrichte"], caseSensitive: true },
+                { q: "vijesti (Pl.) *", a: "die Nachrichten", caseSensitive: true },
+                { q: "pjesma * / *", a: ["das Lied", "die Lieder"], caseSensitive: true },
+                { q: "stvar * / *", a: ["die Sache", "die Sachen"], caseSensitive: true },
+                { q: "poslovni sastanak * / *", a: ["die Besprechung", "die Besprechungen"], caseSensitive: true },
+                { q: "pod * / *", a: ["der Boden", "die Böden"], caseSensitive: true },
+                { q: "memorija (igra): * / *", a: ["die Geschichte", "die Geschichten"], caseSensitive: true },
+            ]
+        },
+        {
+            title: "Random riječi - a11",
+            random: true,
+            questions: [
+                { q: "super: * / * / *", a: ["super", "toll", "prima"], caseSensitive: true },
+                { q: "uvijek: *", a: "immer", caseSensitive: true },
+                { q: "ponekad: *", a: "manchmal", caseSensitive: true },
+                { q: "ništa: *", a: "nichts", caseSensitive: true },
+                { q: "za: *", a: "für", caseSensitive: true },
+                { q: "rado: *", a: "gern", caseSensitive: true },
+                { q: "ukusno: *", a: "lecker", caseSensitive: true },
+                { q: "kasnije: *", a: "später", caseSensitive: true },
+                { q: "sve: *", a: "alles", caseSensitive: true },
+                { q: "jer: *", a: "denn", caseSensitive: true },
+                { q: "sviježe: *", a: "frisch", caseSensitive: true },
+                { q: "gotov (završio): *", a: "fertig", caseSensitive: true },
+                { q: "nije: *", a: "nicht", caseSensitive: true },
+                { q: "jako: *", a: "sehr", caseSensitive: true },
+                { q: "nažalost: *", a: "leider", caseSensitive: true },
+                { q: "osim: *", a: "außer", caseSensitive: true },
+                { q: "sa: *", a: "mit", caseSensitive: true },
+                { q: "bez: *", a: "ohne", caseSensitive: true },
+                { q: "po: *", a: "von", caseSensitive: true },
+                { q: "oboje: *", a: "beide", caseSensitive: true },
+                { q: "nešto: *", a: "etwas", caseSensitive: true },
+                { q: "možda: *", a: "vielleicht", caseSensitive: true },
+                { q: "tada: *", a: "dann", caseSensitive: true },
+                { q: "poslije toga: *", a: "dannach", caseSensitive: true },
+            ]
+        },
+        {
+            title: "Random riječi - a12",
+            random: true,
+            questions: [
+                { q: "trenutno: *", a: "zurzeit" },
+                { q: "oko (otprilike): *", a: "ungefähr" },
+                { q: "nas: *", a: "uns" },
+                { q: "naime: *", a: "nämlich" },
+                { q: "samo: *", a: "erst" },
+                { q: "sada: *", a: "nun" },
+                { q: "već: *", a: "schon" },
+                { q: "još/više: *", a: "noch" },
+                { q: "zaposlen: *", a: "angestellt" },
+                { q: "nezaposlen: *", a: "arbeitslos" },
+                { q: "samozaposlen: *", a: "selbstständig" },
+                { q: "stalan posao: *", a: "berufstätig" },
+                { q: "zanimanje (pridjev) *", a: "beruflich" },
+                { q: "jeftin: *", a: "preiswert" },
+                { q: "povoljan: *", a: "günstig" },
+                { q: "u svakom slučaju: *", a: "auf jeden Fall" },
+                { q: "zapravo: *", a: "eigentlich" },
+                { q: "prilično *", a: "ziemlich" },
+                { q: "uskoro *", a: "bald" },
+                { q: "tada *", a: "danach" },
+                { q: "opet *", a: "wieder" },
+                { q: "posljednji *", a: "letzt" },
+                { q: "najmanje *", a: "mindestens" },
+                { q: "normalno *", a: "normalerweise" },
+                { q: "naročito *", a: "besonders" },
+                { q: "inače *", a: "sonst" },
+                { q: "šareno *", a: "bunt" },
+                { q: "zadovoljan *", a: "zufrieden" },
+                { q: "trudna *", a: "schwanger" },
+            ]
+        },
+        {
+            title: "Sinonimi",
+            random: true,
+            questions: [
+                { q: "waschen *", a: "putzen" },
+                { q: "kurze Reise *", a: "die Ausflug" },
+                { q: "das Hostel *", a: "die Jugendherberge" },
+                { q: "preiswert *", a: "günstig" },
+                { q: "die Turnschuhe *", a: "die Sportschuhe" },
+            ]
+        },
+        {
+            title: "Prepositions",
+            random: true,
+            questions: [
+                { q: "Ich bin Lehrerin * beruf.", a: "von", caseSensitive: true },
+                { q: "Ich wohne * Zagreb.", a: "in", caseSensitive: true },
+                { q: "Ich arbeite * Sekretärin.", a: "als", caseSensitive: true },
+                { q: "Ich arbeite * Sputnik.", a: "bei", caseSensitive: true },
+                { q: "Ich komme * Kroatien.", a: "aus", caseSensitive: true },
+                { q: "Ich relaxe * Hause.", a: "zum", caseSensitive: true },
+                { q: "Ich fahre mit dem Bus * Arbeit.", a: "zur", caseSensitive: true },
+                { q: "* McDonalds gibt es gutes Eis.", a: "Im", caseSensitive: true },
+            ]
+        },
+        {
+            title: "Suprotnosti",
+            random: true,
+            questions: [
+                { q: "puno/malo: * / *", a: ["viel", "wenig"], caseSensitive: true },
+                { q: "često/rijetko: * / *", a: ["oft", "selten"], caseSensitive: true },
+                { q: "ovdje/tamo: * / *", a: ["hier", "dort"], caseSensitive: true },
+                { q: "toplo/hladno: * / *", a: ["warm", "kalt"], caseSensitive: true },
+                { q: "tamno/svijetlo: * / *", a: ["dunkel", "hell"], caseSensitive: true },
+                { q: "malo/veliko: * / *", a: ["klein", "groß"], caseSensitive: true },
+                { q: "lijepo/ružno: * / *", a: ["schön", "hässlich"], caseSensitive: true },
+                { q: "mlad/star: * / *", a: ["jung", "alt"], caseSensitive: true },
+                { q: "staro/novo: * / *", a: ["alt", "neu"], caseSensitive: true },
+                { q: "krako/dugo: * / *", a: ["kurz", "lang"], caseSensitive: true },
+                { q: "brzo/sporo: * / *", a: ["schnell", "langsam"], caseSensitive: true },
+                { q: "jeftino/skupo: * / *", a: ["billig", "teuer"], caseSensitive: true },
+                { q: "točno/netočno: * / *", a: ["richtig", "falsch"], caseSensitive: true },
+                { q: "moderno/zastarjelo: * / *", a: ["modern", "altmodisch"], caseSensitive: true },
+                { q: "rano/kasno: * / *", a: ["früh", "spät"], caseSensitive: true },
+                { q: "slatko/slano: * / *", a: ["suß", "salzig"], caseSensitive: true },
+                { q: "slatko/kiselo: * / *", a: ["suß", "sauer"], caseSensitive: true },
+                { q: "usko/široko: * / *", a: ["schmal", "breit"], caseSensitive: true },
+                { q: "bolestan/zdrav: * / *", a: ["krank", "gesund"], caseSensitive: true },
+                { q: "kupovati/prodavati: * / *", a: ["kaufen", "verkaufen"], caseSensitive: true },
+                { q: "sam/skupa (zajedno): * / *", a: ["allein", "zusammen"], caseSensitive: true },
+                { q: "zanimljivo/dosadno: * / *", a: ["interessant", "langweilig"], caseSensitive: true },
+                { q: "lijen/marljiv: * / *", a: ["faul", "fleißig"], caseSensitive: true },
+                { q: "prazno/puno: * / *", a: ["leer", "voll"], caseSensitive: true },
+                { q: "važno/nevažno: * / *", a: ["wichtig", "unwichtig"], caseSensitive: true },
+                { q: "ispravno/neispravno: * / *", a: ["in Ordnung", "kaputt"], caseSensitive: true },
+                { q: "lagano/teško: * / *", a: ["leicht", "schwer"], caseSensitive: true },
+                { q: "već/tek: * / *", a: ["schon", "erst"], caseSensitive: true },
+                { q: "unutra/vani: * / *", a: ["drinnen", "draußen"], caseSensitive: true },
+                { q: "glasno/tiho (r), tiho (l): * / *, *", a: ["laut", "rihug", "leise"], caseSensitive: true },
+                { q: "prljavo/čisto: * / *", a: ["sauber", "schmutzig"], caseSensitive: true },
+                { q: "zabranjeno/dopušteno: * / *", a: ["verboten", "erlaubt"], caseSensitive: true },
+                { q: "tanko/debelo: * / *", a: ["dünn", "dick"], caseSensitive: true },
+                { q: "široko/usko: * / *", a: ["weit", "eng"], caseSensitive: true },
+                { q: "mršav/debeo * / *", a: ["mager", "dick"], caseSensitive: true },
+                { q: "slab/jak * / *", a: ["schwach", "stark"], caseSensitive: true },
+                { q: "za/protiv * / *", a: ["für", "gegen"], caseSensitive: true },
+                { q: "dobro/loše * / *", a: ["gut", "schlecht"], caseSensitive: true },
+                { q: "sretan/nesretan * / *", a: ["glücklich", "unglücklich"], caseSensitive: true },
+            ]
+        },
+        {
+            title: "Fraze",
+            random: true,
+            questions: [
+                { q: "na dan: *", a: "pro Tag", caseSensitive: true },
+                { q: "Drago mi je! *", a: "Freut mich!", caseSensitive: true },
+                { q: "na primjer: *", a: "zum Biespiel", caseSensitive: true },
+                { q: "not at all: *", a: "gar nicht", caseSensitive: true },
+                { q: "ima (there is): *", a: "es gibt", caseSensitive: true },
+                { q: "rado bih: *", a: "hätte gern", caseSensitive: true },
+                { q: "vruća čokolada: *", a: "heiße Schokolade", caseSensitive: true },
+                { q: "jako kasno: *", a: "sehr spät", caseSensitive: true },
+            ]
+        },
+        {
+            title: "Komparacija pridjeva",
+            random: true,
+            questions: [
+                { q: "dobar - bolji - najbolji: * - * - *", a: ["gut", "besser", "am besten"], caseSensitive: true },
+            ]
+        }
+    ]
+};
+
+var Menu = {
+    init: function () {
+        Test.clear();
+        this.showMenu();
+    },
+
+    showMenu: function () {
+        var buttons = [];
+        var i;
+
+        Test.clear();
+        Test.hideControls();
+        Test.setTitle(Data.title);
+
+        if (buttons.length > 0) {
+            this.addButtons(buttons);
+        }
+
+        for (i = 0; i < Data.tests.length; i++) {
+            this.addButtons([
+                {
+                    id: "button_test_" + i,
+                    text: Data.tests[i].title,
+                    className: "button-test"
+                }
+            ]);
+        }
+
+        this.bindEvents(function () {
+            Menu.buttonClick(this);
+        });
+
+        Test.show();
+    },
+
+    makeButton: function (text, id, className) {
+        var button = document.createElement("button");
+        className = (className === undefined ? "" : " " + className);
+        button.innerHTML = text;
+        button.setAttribute("id", id);
+        button.setAttribute("class", "button-menu" + className);
+        return button;
+    },
+
+    addButtons: function (buttons) {
+        var i, div, button;
+        var div = document.createElement("div");
+        for (i = 0; i < buttons.length; i++) {
+            button = this.makeButton(buttons[i].text, buttons[i].id, buttons[i].className);
+            div.appendChild(button);
+        }
+        Test.testDiv.appendChild(div);
+    },
+
+    bindEvents: function (callback) {
+        var i, buttons = document.getElementsByClassName("button-menu");
+        for (i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener("click", callback);
+        }
+    },
+
+    buttonClick: function (elem) {
+        var index;
+
+        if (elem.id.indexOf("button_test") === 0) {
+            index = parseInt(elem.id.split("_")[2], 10);
+            if (Data.tests[index].hasOwnProperty("random") && Data.tests[index].random === true) {
+                if (confirm("Randomize questions?")) {
+                    Test.randomize = true;
+                } else {
+                    Test.randomize = false;
+                }
+            } else {
+                Test.randomize = false;
+            }
+            Test.setTest(index);
+        }
+        else if (elem.id.indexOf("button_main_menu") === 0) {
+            this.showMenu();
+        }
+    }
+};
+
+var Test = {
+    testDiv: null,
+    points: 0,
+    totalPoints: 0,
+    questions: [],
+    questionsElem: [],
+    randomize: false,
+    title: "",
+    firstRun: true,
+
+    init: function () {
+        this.testDiv = $$("test");
+        Menu.init();
+        this.setTestMargin();
+
+        $$("button_check").addEventListener("click", function () { Test.check(); });
+        $$("button_reset").addEventListener("click", function () { Test.startTest(); });
+        $$("button_menu").addEventListener("click", function () { Menu.init(); });
+    },
+
+    startTest: function () {
+        if (!this.firstRun && this.totalPoints !== this.points && this.points > 0) {
+            if (confirm("Skip correct?")) {
+                this.questions = this.questions.filter(function (q) {
+                    if (!q.correct) {
+                        return q;
+                    }
+                });
+            }
+        }
+        this.clear();
+        this.setTitle(this.title);
+        $$("button_check").disabled = false;
+        this.addQuestions();
+        this.bindEvents();
+        this.points = 0;
+        this.totalPoints = 0;
+        this.show();
+    },
+
+    setTest: function (index) {
+        var test = Data.tests[index];
+        this.showControls();
+        this.title = test.title;
+        this.questions = test.questions.slice();
+        this.firstRun = true;
+        this.startTest();
+    },
+
+    clear: function () {
+        this.testDiv.innerHTML = "";
+        this.testDiv.style.display = "none";
+    },
+
+    show: function () {
+        // unfade
+        var op,
+            ms = 100,
+            currDate = new Date(),
+            currTime,
+            endTime = currDate.getTime() + ms;
+
+        this.testDiv.scrollTo(0, 0);
+        this.testDiv.style.opacity = 0;
+        this.testDiv.style.filter = "alpha(opacity=0)";
+        this.testDiv.style.display = "block";
+
+        var timer = setInterval(function () {
+            currDate = new Date();
+            currTime = currDate.getTime();
+            if (currTime >= endTime) {
+                Test.testDiv.style.opacity = 1;
+                Test.testDiv.style.filter = "alpha(opacity=100)";
+                clearInterval(timer);
+            }
+            op = (ms - (endTime - currTime)) / ms;
+            Test.testDiv.style.opacity = op;
+            Test.testDiv.style.filter = "alpha(opacity=" + op * 100 + ")";
+        }, 10);
+
+    },
+
+    addQuestions: function () {
+        var i,
+            len = this.questions.length,
+            rand,
+            tmp;
+
+        this.questionsElem = [];
+
+        if (this.randomize && len > 1) {
+            for (i = 0; i < len; i++) {
+                do {
+                    rand = Math.floor((Math.random() * len));
+                } while (rand === i);
+                tmp = this.questions[i];
+                this.questions[i] = this.questions[rand];
+                this.questions[rand] = tmp;
+            }
+        }
+
+        for (var i = 0; i < len; i++) {
+            if (this.questions[i].hasOwnProperty("q")) {
+                this.addQuestion(this.questions[i], i);
+            } else {
+                if (i > 0) {
+                    this.addDiv("", "question-spacer");
+                }
+                this.addSubtitle(this.questions[i]);
+            }
+        }
+    },
+
+    addQuestion: function (question, questionIndex) {
+        var i,
+            count = question.q.split("*").length - 1,
+            line = (questionIndex + 1) + ". " + question.q,
+            answer,
+            id;
+
+        for (i = 0; i < count; i++) {
+            id = "answer_" + questionIndex + (count > 1 ? "_" + i : "");
+            answer = "<div class='div_answer' id='" + id + "'>";
+            answer += "<input type='text' id='text_" + id + "' class='answer'>";
+            answer += "</div>";
+            line = line.replace("*", answer);
+            this.questionsElem.push("text_" + id);
+        }
+
+        this.addDiv(line, "question");
+    },
+
+    addSubtitle: function (question) {
+        this.addDiv(question.subtitle, "question question-subtitle");
+    },
+
+    addDiv: function (text, className) {
+        var div = document.createElement("div");
+        div.innerHTML = text;
+        div.setAttribute("class", className);
+        this.testDiv.appendChild(div);
+    },
+
+    bindEvents: function () {
+        var inputs = document.getElementsByClassName("answer");
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].addEventListener("keypress", function (event) {
+                if (event.keyCode !== 13) {
+                    return;
+                }
+
+                var pos = Test.questionsElem.indexOf(event.target.id),
+                    len = Test.questionsElem.length;
+
+                if (pos < len - 1) {
+                    $$(Test.questionsElem[pos + 1]).focus();
+                } else {
+                    $$("button_check").focus();
+                }
+
+                event.preventDefault();
+            });
+        }
+    },
+
+    check: function () {
+        var i, j,
+            correct,
+            caseSensitive;
+
+        for (i = 0; i < this.questions.length; i++) {
+            this.questions[i].correct = false;
+            if (this.questions[i].hasOwnProperty("subtitle")) {
+                continue;
+            }
+            if (!this.questions[i].hasOwnProperty("a")) {
+                continue;
+            }
+            caseSensitive = this.isCaseSensitive(this.questions[i]);
+            if (typeof this.questions[i].a === "string") {
+                if (this.checkAnswer($$("answer_" + i), this.questions[i].a)) {
+                    this.questions[i].correct = true;
+                    this.points++;
+                }
+                this.totalPoints++;
+            } else {
+                correct = true;
+                for (var j = 0; j < this.questions[i].a.length; j++) {
+                    if (this.checkAnswer($$("answer_" + i + "_" + j), this.questions[i].a[j], caseSensitive)) {
+                        this.points++;
+                    } else {
+                        correct = false;
+                    }
+                    this.totalPoints++;
+                }
+                this.questions[i].correct = correct;
+            }
+        }
+
+        this.addPointsToTitle();
+        this.firstRun = false;
+    },
+
+    checkAnswer: function (answerDiv, rightAnswer, caseSensitive) {
+        var userAnswer,
+            correct = false,
+            solution;
+
+        if (answerDiv === null) {
+            return;
+        }
+
+        userAnswer = answerDiv.childNodes[0].value.trim();
+
+        if (caseSensitive) {
+            if (userAnswer === rightAnswer) {
+                correct = true;
+            }
+        } else {
+            if (userAnswer.toLowerCase() === rightAnswer.toLowerCase()) {
+                correct = true;
+            }
+        }
+
+        if (correct) {
+            solution = "<span class='span-correct'>";
+            solution += userAnswer;
+            solution += "</span>";
+
+            answerDiv.setAttribute("class", "div_answer");
+            answerDiv.innerHTML = solution;
+        } else {
+            solution = "<span class='span-fail'>";
+            if (userAnswer.length > 0) {
+                solution += userAnswer;
+            }
+            solution += "</span>";
+
+            solution += "<span class='span-correct-teacher'> ";
+            solution += rightAnswer;
+            solution += "</span>";
+
+            answerDiv.setAttribute("class", "div_answer");
+            answerDiv.innerHTML = solution;
+        }
+
+        $$("button_check").disabled = true;
+
+        return correct;
+    },
+
+    isCaseSensitive: function (q) {
+        if (q.hasOwnProperty("caseSensitive") && q.caseSensitive === true) {
+            return true;
+        }
+        return false;
+    },
+
+    setTitle: function (title) {
+        $$("navbar_title").innerHTML = title;
+    },
+
+    addPointsToTitle: function () {
+        var text = this.points + "/" + this.totalPoints;
+        text += " (" + Math.round((this.points / this.totalPoints) * 100, 2)  + "%)";
+        $$("navbar_title").innerHTML += " <span class='text-red'>" + text + "</span>";
+    },
+
+    showControls: function () {
+        $$("navbar_controls").classList.remove("no-display");
+        $$("button_check").disabled = false;
+        this.setTestMargin();
+    },
+
+    hideControls: function () {
+        $$("navbar_controls").classList.add("no-display");
+        this.setTestMargin();
+    },
+
+    setTestMargin: function () {
+        $$("test").style.marginTop = ($$("navbar").offsetHeight + 10) + "px";
+    }
+};
+
+Test.init();
+
+        </script>
+    </body>
+</html>
